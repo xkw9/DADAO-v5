@@ -1,8 +1,10 @@
 # 工作区（一次性）
 .work/
+/.work
 
 # 持久对象库（上游 bare mirror）
 .cache/
+/.cache
 
 # Python
 __pycache__/

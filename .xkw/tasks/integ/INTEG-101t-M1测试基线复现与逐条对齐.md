@@ -794,4 +794,4 @@ engineer 的执行**无越界**：未改任何判据/期望值、未改基线数
 **遗留（已登记 `deferred.md`，不在本任务修）**：
 1. `Makefile` 的 `build-mc: PASS` / `build-qemu: PASS` 不验产物（与 `INFRA-106t` B21 同类）。
 2. L7 三个 E2E 无输出校验（覆盖非语义）。
-3. `INFRA-105t` S3 第 7 项判据过弱（**仍待用户裁决**，见 `milestones.md` §12 第 5 项）。
+3. `INFRA-105t` S3 第 7 项判据过弱 —— ✅ **已由用户 2026-09-26 裁决为 defer（不修）**，不追溯修改已 `已验证` 任务的任务书（见 `milestones.md` §12 第 5 项与 `deferred.md` 同条）。

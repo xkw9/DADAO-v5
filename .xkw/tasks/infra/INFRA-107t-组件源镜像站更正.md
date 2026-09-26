@@ -7,6 +7,7 @@
 **依赖**：无（可与 M1 复现并行）
 **来源**：`.xkw/knowledge/adr-1001-m1-reproduction-infra.md` D3 的登记项
 **优先级**：低 —— 但**属已知隐患**，`.cache` 一旦清空即会触发
+**规划门禁**：**BLOCKED**——须先执行 `/plan INFRA-107t`，逐条确认镜像选择与 ADR-1003 decisions
 
 ## 目标
 
@@ -48,7 +49,7 @@ mirror.sjtu.edu.cn/git/llvm-project.git/info/refs
 
 ## 步骤
 
-### S1 — 确认替代源（须先经用户确认，`mirrors.md`）
+### S1 — 候选替代源（仅作 `/plan INFRA-107t` 的确认依据）
 
 2026-09-25 实测**四个可用候选**，且 `llvmorg-23.1.1^{}` / `v11.1.1^{}` 三站结果**逐字符相同**：
 
@@ -60,42 +61,54 @@ mirror.sjtu.edu.cn/git/llvm-project.git/info/refs
 | GitHub（`repository`） | ❌ 裸连超时 | 经代理 0.87 MiB/s，实测未完成 | 对照项 |
 | SJTUG `mirrors.sjtug.sjtu.edu.cn/git/` | ❌（302 循环） | — | 已失效 |
 
+本表是候选站实测与替代证据，**不构成镜像选择**。执行本任务前须先运行独立的 `/plan INFRA-107t`，由主会话逐条取得用户确认。
+
 ### S2 — 修正清单
 
 对 `llvm-project` 与 `qemu` 两个组件，把 `[[component.source]]` 的 `name`/`url` 改为裁定结果（`name` 须为组件内唯一的小写标识，如 `tuna`）。
 
 `repository` 字段**保持不动**（`adr-0005` D1：`repository` = 规范上游身份，语义不变）。
 
-### S3 — 处置 ADR（**逐条经用户确认，不得自行决定**）
+清单注释须能定位到 `.xkw/knowledge/adr-1003-component-source-mirror.md`；只有镜像选择与 ADR-1003 decisions 经 `/plan INFRA-107t` 逐条确认后，才能写入具体镜像结论。
 
-`.tao/knowledge/adr-0006` D2 与 `adr-0008` D2 均为 `Accepted`，且都写死了 `name = "sjtu"`。按 `adr-authoring.md`「决策变更时**新增 ADR 或标注 `Superseded`**，不直接改写已 `Accepted` 的决策」，三选一**由用户裁定**：
+### S3 — 先完成独立 `/plan`，再允许 `/dispatch`
 
-| 选项 | 做法 | 适用 |
-| --- | --- | --- |
-| A（推荐） | 在 `.xkw/knowledge/` 新增 ADR（**编号 `adr-1002`**，取 `1xxx` 号段递增），**记录镜像站变更 + 本次实测数据**，并在其中注明 `.tao` 的 `adr-0006`/`adr-0008` D2 对应点已被取代；`.tao/` 因只读约束**不改动** | 避免破坏只读约束；跨树引用靠新 ADR 说明 |
-| B | 解除 `.tao/` 只读，改写 `adr-0006`/`adr-0008` D2 并标 `Superseded` | 保持单树一致，但违反 `workflow.md` 的 `.tao/` 只读约定 |
-| C | 维持 ADR 原文不动，只在清单加注释指向新 ADR | 改动最小，但 ADR 与清单的描述仍不一致 |
+本任务当前保持 **BLOCKED**。唯一合法的 ADR 处置路线是新增：
 
-> 无论选哪个，**ADR 的每个 decision 都须逐条与用户确认后才可写入**（`AGENTS.md`「ADR decision 逐条确认」）。
->
-> 编号约定：`.xkw/knowledge/adr-*` 取 **`1xxx` 号段**（`adr-1001` 已用，故下一个是 `adr-1002`），与 `.tao` 的 `0001`–`0011` 分离（`adr-1001` 的「编号说明」与 `deferred.md` 已记录该约定）。
+`.xkw/knowledge/adr-1003-component-source-mirror.md`
+
+`.xkw/knowledge/adr-1002-xkw-startup-workflow.md` 已占用 `adr-1002` 且为 Accepted，不得复用该编号。`.tao/knowledge/adr-0006-llvm-baseline.md` 与 `.tao/knowledge/adr-0008-qemu-baseline.md` 始终只读，不修改、不原地标注 `Superseded`；新 ADR 负责记录当前 `.xkw` 路线下的镜像站变更、实测依据、与历史决策的对应关系及后续约束。
+
+在执行本任务前，必须先单独运行 `/plan INFRA-107t`。该 `/plan` 阶段由主会话一次只确认一个问题，逐条取得以下确认：
+
+1. llvm-project 与 qemu 的目标镜像选择；
+2. ADR-1003 中每个 proposed decision；
+3. 新 ADR 与只读 `.tao/knowledge/adr-0006`、`adr-0008` 的对应和取代关系；
+4. 清单注释及防退化约束。
+
+确认完成后，主会话在 `.xkw/knowledge/` 落盘 ADR-1003，同步更新本任务，把依赖这些决策的验收项由 BLOCKED 改为“现在可跑”。只有该规划门禁完成后，才允许 `/dispatch INFRA-107t`。
+
+不得在 `/dispatch` 阶段首次确认 ADR decisions；dispatch 只能执行已经通过 `/plan` 确认并落盘的任务书与 ADR。
 
 ### S4 — 补充防退化说明
 
 在清单的注释里写明：`.cache/` 需**浅 bare 预填充**（`git clone --bare --depth 1 --branch <tag>`），否则 `make fetch` 会退化为全量 `--mirror` 克隆（30 GB / 数小时）。避免后来者误删 `.cache` 后直接 `make fetch`。
 
+该注释须与 ADR-1003 经用户确认的 decisions 一致。
+
 ## 验收
 
 | # | 项 | 判据 | 状态 |
 | --- | --- | --- | --- |
-| 1 | 清单已修正 | 两个组件的 `source[0]` 指向经用户裁定的可用镜像 | 现在可跑 |
+| 1 | 清单已修正 | 两个组件的 `source[0]` 指向经用户裁定的可用镜像 | **BLOCKED**（须先 `/plan INFRA-107t` 确认镜像；替代证据：候选站实测、锁定 commit 对照与 ADR-1001 的本轮 TUNA 决策） |
 | 2 | `repository` 未被动 | 两处 `repository` 仍为 `https://github.com/…` | 现在可跑 |
-| 3 | `manifest-check` 通过 | `make PYTHON=python3.12 manifest-check` exit 0 | 现在可跑 |
-| 4 | ADR 已按裁定处置 | 新 ADR 或原地标注已落盘，**每个 decision 有用户确认记录** | 现在可跑 |
-| 5 | 清单与 ADR 一致 | 任意读者从清单能定位到对应的 ADR 决策 | 现在可跑 |
+| 3 | `manifest-check` 通过 | `make PYTHON=python3.12 manifest-check` exit 0 | **BLOCKED**（最终清单依赖镜像选择；替代证据：checker 能力已由 `INFRA-102t` 验证） |
+| 4 | ADR-1003 已落盘 | 每个 decision 均有 `/plan INFRA-107t` 的逐条用户确认记录 | **BLOCKED**（尚未执行独立 `/plan`；替代证据：编号、模板与唯一合法落点已确定） |
+| 5 | 清单与 ADR-1003 一致 | 任意读者从清单能定位到对应的 ADR 决策 | **BLOCKED**（依赖验收 1/4；替代证据：固定路径与交叉引用要求已写入任务书） |
 | 6 | 防退化说明已写 | 清单注释含「浅 bare 预填充」要求 | 现在可跑 |
 | 7 | `make fetch` 仍不联网 | 在 `INFRA-103t` 预填的镜像上执行 `make fetch`，输出仍为 `skipping fetch` | 现在可跑 |
 | 8 | 未擅自改动 `fetch.py` | `--mirror` 语义未变（属独立议题） | 现在可跑 |
+| 9 | `.tao/` 零改动 | 相对启动 baseline 无新增 `.tao` diff | 现在可跑 |
 
 ## 风险
 
@@ -103,8 +116,8 @@ mirror.sjtu.edu.cn/git/llvm-project.git/info/refs
 | --- | --- |
 | 改动清单使 M1 复现结果与「原始环境」产生差异 | 本任务与复现轮**分离**；若在复现完成前执行，须在 `INTEG-101t` 完成区注明执行时点 |
 | 新增 ADR 时 decision 未逐条确认 | 违反 `AGENTS.md`。**必须**先逐条问用户、拿到确认再写 |
-| 擅自解除 `.tao/` 只读 | 违反 `.xkw/knowledge/workflow.md`。选选项 B 须用户明确授权 |
+| 任何 `.tao/` 改动 | 违反 workflow 不变量；立即停止，不存在本任务内授权例外 |
 
 ## 完成区
 
-（待执行后填写：镜像站裁定结果、清单 diff、ADR 处置方式与用户确认记录、上述 8 项逐条结论）
+（待独立 `/plan INFRA-107t` 解除 BLOCKED 后执行；完成区须记录镜像站裁定、清单 diff、ADR-1003 decisions 的逐条确认及上述 9 项结论）

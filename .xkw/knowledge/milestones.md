@@ -60,6 +60,32 @@ INFRA-107t  （独立后续治理，不阻塞 M1 复现）
 
 `105t` 与 `106t` 文件/逻辑上可并行，但当前宿主仅 3 GiB RAM，资源冲突使其**执行上必须串行**；这类“依赖可并行但资源不可并行”的区别须在启动任务中显式记录。
 
+## 下一轮次：F1 浮点闭环
+
+**目标**：在不改写 M1 的前提下，将 SimRISC-03 的 64 个浮点 identity 纳入 spec→testcases 独立 oracle→LLVM MC→QEMU→integ 闭环。
+
+| 层 | 任务 | 状态 | 门禁/说明 |
+| --- | --- | --- | --- |
+| 启动 | `SPEC-101k` | **已验证** | ADR-1004 D1–D18 已确认；D17 OPEN-ID ledger 规划传播经 reviewer §9 Accepted |
+| 隔离基线 | `INFRA-108t` | **已验证** | `.work/f1/**` 隔离树、M1/补丁哈希门禁与未来 `0009+` 编排已验证；canonical path escape 被拒绝 |
+| 合约 | `SPEC-102t` → `SPEC-103t` → `SPEC-104t` | **已验证** → **已验证** → **已验证** | `SPEC-104t` 已完成 27 条 decision 投影、100/100 反例与 lifecycle 状态机；ADR-1009～1015 已 Accepted |
+| 测试 | `TESTCASES-101t` → `TESTCASES-102t` | **已验证** → 待开始 | schema/oracle 接口、M1 兼容与 F1 最小样例已验证；`TESTCASES-102t` 继续承担独立 oracle 与全量向量；无 GOLDEN 模块 |
+| LLVM MC | `LLVM-101t` → `{LLVM-102t, LLVM-103t}` | 待开始 | 依赖 `SPEC-104t=已验证`；仅消费 assembler legality，运行期 gap 为 N/A，不计 PASS |
+| QEMU | `QEMU-101t` → `QEMU-102t` → `QEMU-103t` | 待开始 | 依赖 `SPEC-104t=已验证`、testcases 与适用 ADR Accepted；LLVM/QEMU build 严格串行 |
+| 集成 | `INTEG-102t` → `INTEG-103t` → `INTEG-104m` | 待开始 | 全量收敛须 64 identity required facet 与六项 active ledger 全闭合，且 M1 `747/739/0/8/0` 无回归 |
+
+```text
+SPEC-101k → SPEC-102t（已验证）→ SPEC-103t（已验证）→ SPEC-104t
+                                                        ├→ TESTCASES-101t → TESTCASES-102t
+                                                        │                     └→ QEMU-101t → QEMU-102t → QEMU-103t
+                                                        └→ LLVM-101t → {LLVM-102t, LLVM-103t}
+INFRA-108t ────────────────────────────────────────┘
+{SPEC-104t, TESTCASES-102t, LLVM-101t..103t, QEMU-101t..103t}
+  → INTEG-102t → INTEG-103t → INTEG-104m
+```
+
+当前 active `D17 OPEN-ID ledger` 精确为 `D17:S1,D17:S3,D17:S4,D17:S5,D17:S6,D17:S8`；S2 仅为“no behavioral consequence”的台账外来源追踪，S7 为 ADR-1008 D1 证明的 RD/RF non-overlap，状态 **Closed by spec**（历史 non-gap，不是运行时 PASS）；二者均不得记 PASS。`SPEC-104t` 已验证，ADR-1009～1015 的现行 27 条 decision 已逐条确认并均为 Accepted；下游仍须分别满足 `SPEC-104t=已验证`、适用 ADR Accepted 和自身真实实现能力，不能把语义激活计为实现 PASS。M1 `.work/source/**` 与 `.work/build/**` 不得被 F1 触碰。
+
 ## 状态更新责任
 
 - `/plan` 创建或调整路线、依赖和 `k↔m` 关系。

@@ -1,0 +1,4635 @@
+# invalid/f1-schema-invalid.yaml — F1 最小反样例（**刻意坏数据**；validator 必须逐条拒绝）
+# 本文件由 tools/testcases/generate_f1_schema_fixtures.py 生成，请勿手改。
+# 期望值来源：tools/testcases/f1_oracle_values.py 的**整数位型**独立推导
+# （不调用 LLVM / QEMU / SoftFloat / 宿主 float / libm）。
+# 指令字由 enc() 按 contracts/opcodes.yaml 的字段位号自动组装。
+- id: neg-N1-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+      rf64: '0x3FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N1 bad-rf-index-out-of-range：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb
+    给出目的 rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N2-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+      rf1a: '0x3FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N2 bad-rf-key-syntax：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N3-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '3.0'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N3 bad-rf-value-not-hex：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N4-f1-ftdiv-rounding-rtz-dz
+  identity: ftdiv
+  insn: ftdiv
+  mnemonic: ftdiv
+  format: orrr
+  class: boundary
+  encoding:
+    word: '0x444C1083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x00000000'
+      rf2: '0x3F800000'
+      rf3: '0x00000000'
+    fcsr:
+      rounding_mode: RTZ
+      flags: []
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF7F800000'
+    fcsr:
+      rounding_mode: RTZ
+      flags:
+      - DZ
+      - XX
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC10002'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x7F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RTZ
+        flags:
+        - DZ
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC10002'
+  spec_cite: SimRISC-03 §4.2（rfhc=被除数、rfhd=除数）；contract-f1-floating.md §2「按 IEEE 754 设置 rf0[4:0]」
+  notes: 反例 N4 illegal-flag-name：ftdiv rf1,rf2,rf3：rf2 = 1.0f（被除数）、rf3 = 0.0f（除数），属「有限非零数除以零」。IEEE 754
+    §7.2 规定结果是无限精确结果正确舍入后的值，而 ±∞ 本身可表示且精确 → **四种舍入模式一律 ±∞**（本例取 RTZ，结果仍与 RNE 相同）；§7.4 的 inexact 不成立 →
+    只置 DZ，不置 NX；除零也**不是** overflow，故 D16 的 OF+NX 配对不适用。tetra 装箱后 rf1 = 0xFFFFFFFF7F800000（高 32 位 0xFFFFFFFF
+    是 D13）。本例另证 rf0[17:16]=RTZ 可观测且被保留（observed_mask 覆盖整个 rw 域）
+  order: none
+- id: neg-N5-f1-ftdiv-rounding-rtz-dz
+  identity: ftdiv
+  insn: ftdiv
+  mnemonic: ftdiv
+  format: orrr
+  class: boundary
+  encoding:
+    word: '0x444C1083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x00000000'
+      rf2: '0x3F800000'
+      rf3: '0x00000000'
+    fcsr:
+      rounding_mode: RTZ
+      flags: []
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF7F800000'
+    fcsr:
+      rounding_mode: RTZ
+      flags:
+      - Nv
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC10002'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x7F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RTZ
+        flags:
+        - DZ
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC10002'
+  spec_cite: SimRISC-03 §4.2（rfhc=被除数、rfhd=除数）；contract-f1-floating.md §2「按 IEEE 754 设置 rf0[4:0]」
+  notes: 反例 N5 bad-flag-case：ftdiv rf1,rf2,rf3：rf2 = 1.0f（被除数）、rf3 = 0.0f（除数），属「有限非零数除以零」。IEEE 754 §7.2
+    规定结果是无限精确结果正确舍入后的值，而 ±∞ 本身可表示且精确 → **四种舍入模式一律 ±∞**（本例取 RTZ，结果仍与 RNE 相同）；§7.4 的 inexact 不成立 → 只置 DZ，不置
+    NX；除零也**不是** overflow，故 D16 的 OF+NX 配对不适用。tetra 装箱后 rf1 = 0xFFFFFFFF7F800000（高 32 位 0xFFFFFFFF 是 D13）。本例另证
+    rf0[17:16]=RTZ 可观测且被保留（observed_mask 覆盖整个 rw 域）
+  order: none
+- id: neg-N6-f1-ftdiv-rounding-rtz-dz
+  identity: ftdiv
+  insn: ftdiv
+  mnemonic: ftdiv
+  format: orrr
+  class: boundary
+  encoding:
+    word: '0x444C1083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x00000000'
+      rf2: '0x3F800000'
+      rf3: '0x00000000'
+    fcsr:
+      rounding_mode: RTZ
+      flags: []
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF7F800000'
+    fcsr:
+      rounding_mode: RTZ
+      flags:
+      - DZ
+      - DZ
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC10002'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x7F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RTZ
+        flags:
+        - DZ
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC10002'
+  spec_cite: SimRISC-03 §4.2（rfhc=被除数、rfhd=除数）；contract-f1-floating.md §2「按 IEEE 754 设置 rf0[4:0]」
+  notes: 反例 N6 duplicate-flag：ftdiv rf1,rf2,rf3：rf2 = 1.0f（被除数）、rf3 = 0.0f（除数），属「有限非零数除以零」。IEEE 754 §7.2
+    规定结果是无限精确结果正确舍入后的值，而 ±∞ 本身可表示且精确 → **四种舍入模式一律 ±∞**（本例取 RTZ，结果仍与 RNE 相同）；§7.4 的 inexact 不成立 → 只置 DZ，不置
+    NX；除零也**不是** overflow，故 D16 的 OF+NX 配对不适用。tetra 装箱后 rf1 = 0xFFFFFFFF7F800000（高 32 位 0xFFFFFFFF 是 D13）。本例另证
+    rf0[17:16]=RTZ 可观测且被保留（observed_mask 覆盖整个 rw 域）
+  order: none
+- id: neg-N7-f1-fosclb-d17s5-blocked-facet
+  identity: fosclb
+  insn: fosclb
+  mnemonic: fosclb
+  format: orrr
+  class: legality
+  encoding:
+    word: '0x44741083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x3FF0000000000000'
+      rf2: '0x4000000000000000'
+      rf3: '0x0000000000000003'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1015 D6：scaleB 指数 n 由 rf0[17:16] 当前舍入模式把 rfhd 取整后得到
+      open_ids:
+      - D17:S5
+      rule: rfhd 按 rf0[17:16] 舍入成整数 n 后算 rfhc×2^n
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S5
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: open
+    records: []
+  spec_cite: adr-1015 D6（scaleB）；contract-f1-floating.md §6.2 D17:S5
+  notes: 反例 N7 active-plus-open-id：fosclb rf1,rf2,rf3：orrr 的三个 rf 字段分别是 rfhb[17:12]=目的 rf1、rfhc[11:6]=被缩放的源
+    rf2=1.0、**rfhd[5:0]=指数 n 的来源 rf3=3**——指数在 rfhd，不存在 rf4 这个操作数。fosclb 的 semantics facet 由 D17:S5 压住
+    → facet 级 blocked 并指向具名 OPEN-ID `D17:S5`。本例**只**验证 blocked facet 的表达能力：semantics facet blocked 时用
+    oracle.kind=open 声明「无唯一 expected」（expected_state / expected_fault 皆 null、records 为空），而同一 identity
+    的 encoding/format/operands/legality/rf0_operand/fcsr_flags facet 仍可 active 并各自带 cite —— 正是「同一 identity
+    编码 facet active 而未决语义 facet blocked」
+- id: neg-N8-f1-fosclb-d17s5-blocked-facet
+  identity: fosclb
+  insn: fosclb
+  mnemonic: fosclb
+  format: orrr
+  class: legality
+  encoding:
+    word: '0x44741083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x3FF0000000000000'
+      rf2: '0x4000000000000000'
+      rf3: '0x0000000000000003'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: blocked
+      cite: adr-1015 D6：scaleB 指数 n 由 rf0[17:16] 当前舍入模式把 rfhd 取整后得到
+      rule: rfhd 按 rf0[17:16] 舍入成整数 n 后算 rfhc×2^n
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S5
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: open
+    records: []
+  spec_cite: adr-1015 D6（scaleB）；contract-f1-floating.md §6.2 D17:S5
+  notes: 反例 N8 blocked-without-open-ids：fosclb rf1,rf2,rf3：orrr 的三个 rf 字段分别是 rfhb[17:12]=目的 rf1、rfhc[11:6]=被缩放的源
+    rf2=1.0、**rfhd[5:0]=指数 n 的来源 rf3=3**——指数在 rfhd，不存在 rf4 这个操作数。fosclb 的 semantics facet 由 D17:S5 压住
+    → facet 级 blocked 并指向具名 OPEN-ID `D17:S5`。本例**只**验证 blocked facet 的表达能力：semantics facet blocked 时用
+    oracle.kind=open 声明「无唯一 expected」（expected_state / expected_fault 皆 null、records 为空），而同一 identity
+    的 encoding/format/operands/legality/rf0_operand/fcsr_flags facet 仍可 active 并各自带 cite —— 正是「同一 identity
+    编码 facet active 而未决语义 facet blocked」
+- id: neg-N9-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: ''
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N9 missing-facet-cite：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N10-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: ''
+  notes: 反例 N10 missing-spec-cite：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N11-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: see the spec
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N11 facet-cite-names-no-authority：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb
+    给出目的 rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N12-f1-foadd-basic-rf-index
+  identity: foaddx
+  insn: foaddx
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N12 unknown-identity：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N13-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: fomul
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N13 identity-insn-mismatch：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N14-f1-ldt-rf-malign
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: legality
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000002'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000002'
+      value: '0x0000000000000000'
+      width: 4
+  expected_fault: MALIGN
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr: null
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(4)（SimRISC-03:25）
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fault:
+        type: MALIGN
+        pc: '0xFFFF00000010'
+  spec_cite: contract-f1-floating.md §3.1 aligned(4)；adr-1015 D3（ILLI 先于 MALIGN）
+  notes: 反例 N14 fault-and-state-both：ld.t-rf rf1, rb1, 0：rb1 = 0xFFFF00000002（% 4 = 2）+ imms12 = 0 → 4
+    字节不对齐 → MALIGN。本例无任何静态 ILLI 谓词成立，故走 MALIGN 分支
+  order: none
+- id: neg-N15-f1-setw-rf0-sbz-mask-d17s6
+  identity: set.w-rf
+  insn: set.w-rf
+  mnemonic: set.w
+  format: rwii
+  class: boundary
+  encoding:
+    word: '0x4F000000'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf0: '0x7FF800007FC00000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rf0_dst_allowed（写 rf0 合法）
+    semantics:
+      status: active
+      cite: adr-1015 D5：写 rf0 时对 [50:32]/[21:18]/[15:5] 静默忽略，只读域保持合约 §2 的位型
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1015 D5（SBZ write）；adr-1009 D2
+  notes: 反例 N15 rf0-double-expressed：set.w-rf rf0（rfha=0, wpN=0）, immu16=0：合法写 rf0（在十条白名单内）。只读域 [63:51]/[31:22]
+    按合约 §2 保持 0xFFF / 0x1FF 位型，rw 域写 0；**SBZ 域不被断言** —— observed_mask 只含只读域 + rw 域，不含任何 SBZ 位，这正是 D17:S6「写入行为未规定」的可观测边界
+  order: none
+- id: neg-N16-f1-setw-rf0-sbz-mask-d17s6
+  identity: set.w-rf
+  insn: set.w-rf
+  mnemonic: set.w
+  format: rwii
+  class: boundary
+  encoding:
+    word: '0x4F000000'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFFFFFFFFFFFFFFF'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rf0_dst_allowed（写 rf0 合法）
+    semantics:
+      status: active
+      cite: adr-1015 D5：写 rf0 时对 [50:32]/[21:18]/[15:5] 静默忽略，只读域保持合约 §2 的位型
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1015 D5（SBZ write）；adr-1009 D2
+  notes: 反例 N16 observed-mask-claims-sbz：set.w-rf rf0（rfha=0, wpN=0）, immu16=0：合法写 rf0（在十条白名单内）。只读域 [63:51]/[31:22]
+    按合约 §2 保持 0xFFF / 0x1FF 位型，rw 域写 0；**SBZ 域不被断言** —— observed_mask 只含只读域 + rw 域，不含任何 SBZ 位，这正是 D17:S6「写入行为未规定」的可观测边界
+  order: none
+- id: neg-N17-f1-setw-rf0-sbz-mask-d17s6
+  identity: set.w-rf
+  insn: set.w-rf
+  mnemonic: set.w
+  format: rwii
+  class: boundary
+  encoding:
+    word: '0x4F000000'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0x000000000000001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rf0_dst_allowed（写 rf0 合法）
+    semantics:
+      status: active
+      cite: adr-1015 D5：写 rf0 时对 [50:32]/[21:18]/[15:5] 静默忽略，只读域保持合约 §2 的位型
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1015 D5（SBZ write）；adr-1009 D2
+  notes: 反例 N17 observed-mask-misses-rw-domain：set.w-rf rf0（rfha=0, wpN=0）, immu16=0：合法写 rf0（在十条白名单内）。只读域
+    [63:51]/[31:22] 按合约 §2 保持 0xFFF / 0x1FF 位型，rw 域写 0；**SBZ 域不被断言** —— observed_mask 只含只读域 + rw 域，不含任何
+    SBZ 位，这正是 D17:S6「写入行为未规定」的可观测边界
+  order: none
+- id: neg-N18-f1-setw-rf0-sbz-mask-d17s6
+  identity: set.w-rf
+  insn: set.w-rf
+  mnemonic: set.w
+  format: rwii
+  class: boundary
+  encoding:
+    word: '0x4F000000'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC10000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rf0_dst_allowed（写 rf0 合法）
+    semantics:
+      status: active
+      cite: adr-1015 D5：写 rf0 时对 [50:32]/[21:18]/[15:5] 静默忽略，只读域保持合约 §2 的位型
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1015 D5（SBZ write）；adr-1009 D2
+  notes: 反例 N18 fcsr-value-wrong：set.w-rf rf0（rfha=0, wpN=0）, immu16=0：合法写 rf0（在十条白名单内）。只读域 [63:51]/[31:22]
+    按合约 §2 保持 0xFFF / 0x1FF 位型，rw 域写 0；**SBZ 域不被断言** —— observed_mask 只含只读域 + rw 域，不含任何 SBZ 位，这正是 D17:S6「写入行为未规定」的可观测边界
+  order: none
+- id: neg-N19-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RUP
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N19 from-reset-not-rne：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N20-f1-ldt-rf-d17s2-trace-only
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: semantic
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x000000003F800000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF3F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §6.3：D17:S2 无行为后果，**不**据此追加谓词
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S2
+    trace_only:
+    - D17:S2
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: contract-f1-floating.md §6.3（D17:S2：no behavioral consequence; resolved/trace-only; not in
+    D17 OPEN-ID ledger; never PASS）
+  notes: 反例 N20 s2-forced-into-active-keys：ld.t-rf rf1, rb1, 0：immu6 上限 63 由 6 位字段宽唯一决定、「有效范围 1~63」是否出现在本节**无行为后果**。D17:S2
+    仅在 ledger_refs.trace_only 里作来源追踪：不占用 ledger 键、不是阻塞项、不得计 PASS
+  order: none
+- id: neg-N21-f1-rf2rd-s7-spec-determined-nongap
+  identity: rf2rd
+  insn: rf2rd
+  mnemonic: rf2rd
+  format: orri
+  class: overlap
+  encoding:
+    word: '0x40F82043'
+  input_state:
+    rd:
+      rd2: '0x0000000000000000'
+      rd3: '0x0000000000000000'
+      rd4: '0x0000000000000000'
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0123456789ABCDEF'
+      rf2: '0xFEDCBA9876543210'
+      rf3: '0x0000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd:
+      rd2: '0x0123456789ABCDEF'
+      rd3: '0xFEDCBA9876543210'
+      rd4: '0x0000000000000000'
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0123456789ABCDEF'
+      rf2: '0xFEDCBA9876543210'
+      rf3: '0x0000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1008 D1：源/目的范围重叠时的读写顺序由 SimRISC-00:41-46 与 SimRISC-03:34-50 唯一确定
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S7
+    trace_only: []
+    non_gap:
+    - D17:S7
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: unordered
+    records:
+    - reg:
+        bank: rd
+        index: 2
+        value: '0x0123456789ABCDEF'
+    - reg:
+        bank: rd
+        index: 3
+        value: '0xFEDCBA9876543210'
+    - reg:
+        bank: rd
+        index: 4
+        value: '0x0000000000000000'
+  spec_cite: adr-1008 D1（D17:S7 = spec-determined non-gap：move overlap 由 SimRISC-00:41-46 与 SimRISC-03:34-50
+    唯一确定）
+  notes: 反例 N21 s7-forced-into-active-keys：rf2rd rd2, rf1, immu6=3：源 rf1..rf3 写 rd2..rd4（源/目的范围重叠）。D17:S7
+    是 ADR-1008 D1 已证明的 spec-determined non-gap —— **不进** active ledger、**不计** OPEN/BLOCKED、**不计** PASS；它只出现在
+    ledger_refs.non_gap 里作对照
+  order: read-before-write
+- id: neg-N22-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S8
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N22 foreign-open-id：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N23-f1-ldt-rf-d17s2-trace-only
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: semantic
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x000000003F800000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF3F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: blocked
+      cite: contract-f1-floating.md §6.3：D17:S2 无行为后果，**不**据此追加谓词
+      open_ids:
+      - D17:S2
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only:
+    - D17:S2
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: contract-f1-floating.md §6.3（D17:S2：no behavioral consequence; resolved/trace-only; not in
+    D17 OPEN-ID ledger; never PASS）
+  notes: 反例 N23 s2-forced-into-blocked-facet：ld.t-rf rf1, rb1, 0：immu6 上限 63 由 6 位字段宽唯一决定、「有效范围 1~63」是否出现在本节**无行为后果**。D17:S2
+    仅在 ledger_refs.trace_only 里作来源追踪：不占用 ledger 键、不是阻塞项、不得计 PASS
+  order: none
+- id: neg-N24-f1-ftadd-tetra-high-half-d13
+  identity: ftadd
+  insn: ftadd
+  mnemonic: ftadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44401083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x00000000'
+      rf2: '0x3F800000'
+      rf3: '0x00000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x000000003F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2；adr-1011 D1（高半部固定 0xFFFFFFFF）
+  notes: 反例 N24 d13-high-half：ftadd rf1,rf2,rf3 = 0.0f + 1.0f = 1.0f = 0x3F800000；D13 规定 tetra 写 rf 的高
+    32 位固定 0xFFFFFFFF → 64 位 0xFFFFFFFF3F800000。本例用 low32/high32 **两半独立**观测（oracle 记录与 expected_state
+    交叉核对）
+  order: none
+- id: neg-N25-f1-foqcmp-unordered-d14
+  identity: foqcmp
+  insn: foqcmp
+  mnemonic: foqcmp
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44A01042'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x7FF8000000000000'
+      rf2: '0x3FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd:
+      rd1: '0x7FF0000000000001'
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    compare_unordered:
+      status: active
+      cite: adr-1012 D2；contract-f1-floating.md
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    unordered_case: true
+    records:
+    - reg:
+        bank: rd
+        index: 1
+        value: '0x7FF8000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1012 D2（quiet 类 unordered 位型）
+  notes: 反例 N25 d14-wrong-bits：foqcmp rd1, rf1, rf2：orrr 的 rf 字段是 rfhc[11:6]=rf1、rfhd[5:0]=rf2，rf1 = quiet
+    NaN（0x7FF8000000000000）→ unordered；D14 规定 foqcmp 的 unordered 写 RD 0x7FF8000000000000，输出位型只由 qcmp/scmp
+    类别决定，与输入 NaN 的 quiet/signaling 无关。源**刻意**取 qNaN：sNaN 作操作数会按 IEEE 754 §7.2 另置 NV，而 rule_tables.D15
+    的「qNaN 不置 NV / sNaN 置 NV」只固定在 18 条算术 identity 上、比较类未固定 → 用 sNaN 就必须断言一个未被激活的 flags 取值。foqcmp 只有两个
+    rf 源，不得往 input_state.rf 里塞 rf3
+  order: none
+- id: neg-N26-f1-foadd-overflow-of-nx-d16
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: boundary
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x7FEFFFFFFFFFFFFF'
+      rf3: '0x7FEFFFFFFFFFFFFF'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x7FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags:
+      - OF
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00014'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: adr-1014 D1/D2：最终舍入后检测 tininess；上溢同时置 OF+NX
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x7FF0000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags:
+        - NX
+        - OF
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00014'
+  spec_cite: adr-1014 D2（overflow ⇒ OF+NX）
+  notes: 反例 N26 of-without-nx：foadd rf1,rf2,rf3：rf2 = rf3 = 最大有限 fo（0x7FEFFFFFFFFFFFFF），精确和 2×max 超过最大有限
+    → 舍入到 +Inf（0x7FF0000000000000）；D16 规定上溢**同时**置 OF+NX。把 NX 去掉会被 I5 判 FAIL；把 OF/NX 搬到 D16 scope 外的 identity
+    也会
+  order: none
+- id: neg-N27-f1-ldo-rf-d12-non-automatic
+  identity: ld.o-rf
+  insn: ld.o-rf
+  mnemonic: ld.o
+  format: rrii
+  class: semantic
+  encoding:
+    word: '0x26041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x7FF0000000000001'
+      width: 8
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x7FF0000000000001'
+    fcsr:
+      rounding_mode: RNE
+      flags:
+      - OF
+      - NX
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(8)
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: adr-1010 D1/D2：数据搬移类**非**自动置位，装载 sNaN 也不置 NV
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x7FF0000000000001'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1010 D2（non-automatic scope 含 ld.o-rf）
+  notes: 反例 N27 of-outside-d16-scope：ld.o-rf rf1, rb1, 0 从 0xFFFF00000000 装 8 字节 sNaN（0x7FF0000000000001，**不**装箱：octa
+    无 D13）。ld.o-rf 属 D12 非自动置位的 11 条之一 → rf0[4:0] 保持 0（自动置 NV 会被 I4 判 FAIL）
+  order: none
+- id: neg-N28-f1-ldo-rf-d12-non-automatic
+  identity: ld.o-rf
+  insn: ld.o-rf
+  mnemonic: ld.o
+  format: rrii
+  class: semantic
+  encoding:
+    word: '0x26041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x7FF0000000000001'
+      width: 8
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x7FF0000000000001'
+    fcsr:
+      rounding_mode: RNE
+      flags:
+      - NV
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(8)
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: adr-1010 D1/D2：数据搬移类**非**自动置位，装载 sNaN 也不置 NV
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x7FF0000000000001'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: adr-1010 D2（non-automatic scope 含 ld.o-rf）
+  notes: 反例 N28 d12-non-automatic-sets-nv：ld.o-rf rf1, rb1, 0 从 0xFFFF00000000 装 8 字节 sNaN（0x7FF0000000000001，**不**装箱：octa
+    无 D13）。ld.o-rf 属 D12 非自动置位的 11 条之一 → rf0[4:0] 保持 0（自动置 NV 会被 I4 判 FAIL）
+  order: none
+- id: neg-N29-f1-rd2rf-rf0-illi-d11
+  identity: rd2rf
+  insn: rd2rf
+  mnemonic: rd2rf
+  format: orri
+  class: legality
+  encoding:
+    word: '0x40F400C1'
+  input_state:
+    rd:
+      rd3: '0x0000000000000001'
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: MALIGN
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rf0_dst_allowed；adr-1009 D2
+    semantics:
+      status: blocked
+      cite: contract-f1-floating.md §6.2 D17:S6
+      open_ids:
+      - D17:S6
+      rule: rf0 的 SBZ 域写入行为
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fault:
+        type: ILLI
+        pc: '0xFFFF00000010'
+  spec_cite: adr-1009 D2（rf0 写白名单十条不含 rd2rf）；contract-f1-floating.md §3.1
+  notes: 反例 N29 d11-wrong-fault：rd2rf rf0（目的 rfhb=0）, 源 rd3, immu6=1：目的 rf0 不在十条白名单内 → D11 明确 ILLI；整条不提交任何
+    rf 写（fault 记录是最后一条，且不带任何 reg/mem/fcsr 记录）
+  order: none
+- id: neg-N30-f1-ftcls-immu6-neq1-illi-priority
+  identity: ftcls
+  insn: ftcls
+  mnemonic: ftcls
+  format: orri
+  class: legality
+  encoding:
+    word: '0x44001041'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000002'
+    ra: {}
+    rf:
+      rf1: '0x3F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: ILLI
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: adr-1015 D2：immu6≠1 非 assembler 路径到硬件即 ILLI
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4.8
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S3
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fault:
+        type: ILLI
+        pc: '0xFFFF00000010'
+  spec_cite: adr-1015 D2（classify immediate）；adr-1015 D3（ILLI 先于 MALIGN）
+  notes: 反例 N30 s3-legal-encoding-but-expected-illi：ftcls rd1, rf1, immu6=2：classify 的 immu6 固定为 1（S3
+    / ADR-1015 D2）→ 静态 ILLI；非法操作数**不进入**对齐判定（D17:S4），故即使 rb1 预置成不对齐值也仍是 ILLI 而不是 MALIGN
+  order: none
+- id: neg-N31-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44640000'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N31 encoding-wrong-identity：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N32-f1-ldm-t-block-ea0-increment
+  identity: ldm.t-rf
+  insn: ldm.t-rf
+  mnemonic: ldm.t
+  format: rrri
+  class: semantic
+  encoding:
+    word: '0x2E0C2042'
+  input_state:
+    rd:
+      rd1: '0x0000000000000010'
+    rb:
+      rb2: '0x0000FFFF00001000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00001010'
+      value: '0x000000003F800000'
+      width: 4
+    - address: '0xFFFF00001014'
+      value: '0x0000000040000000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf3: '0xFFFFFFFF3F800000'
+      rf4: '0xFFFFFFFF40000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1015 D7/D8：EA0=rbhb+rdhc、EA(i)=EA0+i*4、rf 递增
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: block
+    records:
+    - reg:
+        bank: rf
+        index: 3
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - reg:
+        bank: rf
+        index: 4
+        low32: '0x40000000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+    elements:
+    - rf: 3
+      address: '0xFFFF00001010'
+      width: 4
+      value: '0x000000003F800000'
+    - rf: 4
+      address: '0xFFFF00001018'
+      width: 4
+      value: '0x0000000040000000'
+  spec_cite: adr-1015 D7/D8；SimRISC-03 §存取RF寄存器
+  notes: 反例 N32 block-ea-wrong：ldm.t rf3, rb2, rd1, immu6=2：EA0 = 0xFFFF00001000 + 0x10 = 0xFFFF00001010；EA(1)
+    = EA0 + 1*4 = 0xFFFF00001014；rf3/rf4 递增；每元素 4 字节按 D13 装箱成 0xFFFFFFFFxxxxxxxx
+  order: block-increasing
+- id: neg-N33-f1-ldm-t-block-ea0-increment
+  identity: ldm.t-rf
+  insn: ldm.t-rf
+  mnemonic: ldm.t
+  format: rrri
+  class: semantic
+  encoding:
+    word: '0x2E0C2042'
+  input_state:
+    rd:
+      rd1: '0x0000000000000010'
+    rb:
+      rb2: '0x0000FFFF00001000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00001010'
+      value: '0x000000003F800000'
+      width: 4
+    - address: '0xFFFF00001014'
+      value: '0x0000000040000000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf3: '0xFFFFFFFF3F800000'
+      rf4: '0xFFFFFFFF40000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1015 D7/D8：EA0=rbhb+rdhc、EA(i)=EA0+i*4、rf 递增
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: block
+    records:
+    - reg:
+        bank: rf
+        index: 3
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - reg:
+        bank: rf
+        index: 4
+        low32: '0x40000000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+    elements:
+    - rf: 3
+      address: '0xFFFF00001010'
+      width: 4
+      value: '0x000000003F800000'
+    - rf: 5
+      address: '0xFFFF00001014'
+      width: 4
+      value: '0x0000000040000000'
+  spec_cite: adr-1015 D7/D8；SimRISC-03 §存取RF寄存器
+  notes: 反例 N33 block-rf-not-incrementing：ldm.t rf3, rb2, rd1, immu6=2：EA0 = 0xFFFF00001000 + 0x10 = 0xFFFF00001010；EA(1)
+    = EA0 + 1*4 = 0xFFFF00001014；rf3/rf4 递增；每元素 4 字节按 D13 装箱成 0xFFFFFFFFxxxxxxxx
+  order: block-increasing
+- id: neg-N34-f1-ldm-t-block-ea0-increment
+  identity: ldm.t-rf
+  insn: ldm.t-rf
+  mnemonic: ldm.t
+  format: rrri
+  class: semantic
+  encoding:
+    word: '0x2E0C2042'
+  input_state:
+    rd:
+      rd1: '0x0000000000000010'
+    rb:
+      rb2: '0x0000FFFF00001000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00001010'
+      value: '0x000000003F800000'
+      width: 4
+    - address: '0xFFFF00001014'
+      value: '0x0000000040000000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf3: '0xFFFFFFFF3F800000'
+      rf4: '0xFFFFFFFF40000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1015 D7/D8：EA0=rbhb+rdhc、EA(i)=EA0+i*4、rf 递增
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: block
+    records:
+    - reg:
+        bank: rf
+        index: 3
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - reg:
+        bank: rf
+        index: 4
+        low32: '0x40000000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+    elements:
+    - rf: 3
+      address: '0xFFFF00001010'
+      width: 4
+      value: '0x000000003F800000'
+  spec_cite: adr-1015 D7/D8；SimRISC-03 §存取RF寄存器
+  notes: 反例 N34 block-count-vs-immu6：ldm.t rf3, rb2, rd1, immu6=2：EA0 = 0xFFFF00001000 + 0x10 = 0xFFFF00001010；EA(1)
+    = EA0 + 1*4 = 0xFFFF00001014；rf3/rf4 递增；每元素 4 字节按 D13 装箱成 0xFFFFFFFFxxxxxxxx
+  order: block-increasing
+- id: neg-N35-f1-ldt-rf-d17s2-trace-only
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: semantic
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x000000003F800000'
+      width: 8
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF3F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §6.3：D17:S2 无行为后果，**不**据此追加谓词
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only:
+    - D17:S2
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: contract-f1-floating.md §6.3（D17:S2：no behavioral consequence; resolved/trace-only; not in
+    D17 OPEN-ID ledger; never PASS）
+  notes: 反例 N35 mem-width-wrong：ld.t-rf rf1, rb1, 0：immu6 上限 63 由 6 位字段宽唯一决定、「有效范围 1~63」是否出现在本节**无行为后果**。D17:S2
+    仅在 ledger_refs.trace_only 里作来源追踪：不占用 ledger 键、不是阻塞项、不得计 PASS
+  order: none
+- id: neg-N36-f1-ldt-rf-malign
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: legality
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000000'
+      value: '0x0000000000000000'
+      width: 4
+  expected_fault: MALIGN
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(4)（SimRISC-03:25）
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fault:
+        type: MALIGN
+        pc: '0xFFFF00000010'
+  spec_cite: contract-f1-floating.md §3.1 aligned(4)；adr-1015 D3（ILLI 先于 MALIGN）
+  notes: 反例 N36 malign-but-aligned：ld.t-rf rf1, rb1, 0：rb1 = 0xFFFF00000002（% 4 = 2）+ imms12 = 0 → 4 字节不对齐
+    → MALIGN。本例无任何静态 ILLI 谓词成立，故走 MALIGN 分支
+  order: none
+- id: neg-N37-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4000000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N37 oracle-disagrees-with-expected-state：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb
+    给出目的 rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N38-f1-ftadd-tetra-high-half-d13
+  identity: ftadd
+  insn: ftadd
+  mnemonic: ftadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44401083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x00000000'
+      rf2: '0x3F800000'
+      rf3: '0x00000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0xFFFFFFFF3F800000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        low32: '0x3F800000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2；adr-1011 D1（高半部固定 0xFFFFFFFF）
+  notes: 反例 N38 half-observation-missing-high32：ftadd rf1,rf2,rf3 = 0.0f + 1.0f = 1.0f = 0x3F800000；D13
+    规定 tetra 写 rf 的高 32 位固定 0xFFFFFFFF → 64 位 0xFFFFFFFF3F800000。本例用 low32/high32 **两半独立**观测（oracle 记录与
+    expected_state 交叉核对）
+  order: none
+- id: neg-N39-f1-foadd-canonical-qnan-blocked
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x7FF0000000000001'
+      rf3: '0x3FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags:
+      - NV
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00001'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: blocked
+      cite: contract-f1-floating.md D1：算术丢弃 payload 与符号返回 canonical qNaN，但 canonical qNaN 的 64 位常量未给
+      open_ids:
+      - D15
+      rule: canonical_qnan_bits = null
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: blocked
+      cite: contract-f1-floating.md §7.2；adr-1013 D1
+      open_ids:
+      - D15
+      rule: canonical_qnan_bits = null
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points:
+  - D15:canonical_qnan_bits
+  - D99:invented
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags:
+        - NV
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00001'
+  spec_cite: contract-f1-floating.md D1（丢弃 payload/符号返回 canonical qNaN；sNaN 输入置 NV）；resolution.rule_tables.D15.canonical_qnan_bits
+    = null
+  notes: 反例 N39 blocked-point-not-in-vocab：foadd rf1,rf2,rf3：**源** rf2 = sNaN（0x7FF0000000000001，指数全 1、尾数最高位
+    0）→ 结果是 canonical qNaN 且置 NV（rf3 = 1.0、rf1 = 0 只是让另一路源保持普通数）。sNaN 必须在**源**上：放进目的寄存器 rf1 是常见错值来源，期望值与
+    notes 照样自洽，但真实操作数里根本没有 NaN。但 ADR-1013 **未给出** canonical qNaN 的 64 位常量（rule_tables.canonical_qnan_bits
+    = null，下游不得代填）→ 本例只断言 rf0 的 NV flag，**不断言** rf1 的 64 位结果。若代填 0x7FF8000000000000 就等于伪造常量，会被 blocked_points
+    门控拦下
+  order: none
+- id: neg-N40-f1-foadd-canonical-qnan-blocked
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x7FF0000000000001'
+      rf3: '0x3FF0000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x7FF8000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags:
+      - NV
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00001'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: blocked
+      cite: contract-f1-floating.md D1：算术丢弃 payload 与符号返回 canonical qNaN，但 canonical qNaN 的 64 位常量未给
+      open_ids:
+      - D15
+      rule: canonical_qnan_bits = null
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: blocked
+      cite: contract-f1-floating.md §7.2；adr-1013 D1
+      open_ids:
+      - D15
+      rule: canonical_qnan_bits = null
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points:
+  - D15:canonical_qnan_bits
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fcsr:
+        rounding_mode: RNE
+        flags:
+        - NV
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00001'
+  spec_cite: contract-f1-floating.md D1（丢弃 payload/符号返回 canonical qNaN；sNaN 输入置 NV）；resolution.rule_tables.D15.canonical_qnan_bits
+    = null
+  notes: 反例 N40 fabricated-canonical-qnan：foadd rf1,rf2,rf3：**源** rf2 = sNaN（0x7FF0000000000001，指数全 1、尾数最高位
+    0）→ 结果是 canonical qNaN 且置 NV（rf3 = 1.0、rf1 = 0 只是让另一路源保持普通数）。sNaN 必须在**源**上：放进目的寄存器 rf1 是常见错值来源，期望值与
+    notes 照样自洽，但真实操作数里根本没有 NaN。但 ADR-1013 **未给出** canonical qNaN 的 64 位常量（rule_tables.canonical_qnan_bits
+    = null，下游不得代填）→ 本例只断言 rf0 的 NV flag，**不断言** rf1 的 64 位结果。若代填 0x7FF8000000000000 就等于伪造常量，会被 blocked_points
+    门控拦下
+  order: none
+- id: neg-N41-f1-foroot-negative-zero-unspecified
+  identity: foroot
+  insn: foroot
+  mnemonic: foroot
+  format: orri
+  class: legality
+  encoding:
+    word: '0x44381082'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x8000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x3FF0000000000000'
+    fcsr: null
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 rootn_n_in_2_3（n 只支持 2/3）
+    semantics:
+      status: blocked
+      cite: contract-f1-floating.md §7.2 remaining_unspecified：rootn(-0,2) 规范明示不做要求
+      open_ids:
+      - D15
+      rule: rootn(-0,2) 不得有唯一 expected
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: blocked
+      cite: contract-f1-floating.md §7.2；canonical_qnan_bits 在 ADR-1013 未给 64 位常量
+      open_ids:
+      - D15
+      rule: canonical_qnan_bits = null
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points:
+  - D15:canonical_qnan_bits
+  - CAP-01:root-log-correct-rounding
+  unspecified:
+  - rootn(-0,2)
+  oracle:
+    kind: open
+    records: []
+  spec_cite: contract-f1-floating.md §7.2（rootn(-0,2) = explicitly-unspecified）；contract-f1-floating.md
+    §3.1 rootn_n_in_2_3
+  notes: 反例 N41 unspecified-gains-unique-expected：foroot rf1, rf2, immu6=2：n=2 合法，被开方数 rf2 = -0.0（0x8000000000000000，仅符号位
+    1）——正是 rootn(-0,2) 这个规范明示「不做具体要求」的点 → oracle.kind=open，**不生成**唯一 expected（expected_state 为 null、expected_fault
+    为 null、oracle.records 为空）。rf1 是目的寄存器，orri 只有 rfhb/rfhc 两个 rf 操作数 + immu6，不得再往 input_state.rf 里塞指令不存在的
+    rf。root/log 的独立正确舍入算法属 CAP-01，仍 BLOCKED；canonical_qnan_bits 保持 null，下游不得代填
+- id: neg-N42-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+    compare_unordered:
+      status: active
+      cite: x
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N42 na-facet-declared：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N43-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: sorted
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N43 unknown-oracle-kind：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N44-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+    weights:
+    - 1
+    - 2
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N44 unknown-oracle-key：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N45-f1-ldm-t-block-ea0-increment
+  identity: ldm.t-rf
+  insn: ldm.t-rf
+  mnemonic: ldm.t
+  format: rrri
+  class: semantic
+  encoding:
+    word: '0x2E0C2042'
+  input_state:
+    rd:
+      rd1: '0x0000000000000010'
+    rb:
+      rb2: '0x0000FFFF00001000'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00001010'
+      value: '0x000000003F800000'
+      width: 4
+    - address: '0xFFFF00001014'
+      value: '0x0000000040000000'
+      width: 4
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf3: '0xFFFFFFFF3F800000'
+      rf4: '0xFFFFFFFF40000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: adr-1015 D7/D8：EA0=rbhb+rdhc、EA(i)=EA0+i*4、rf 递增
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 3
+        low32: '0x3F800000'
+        high32: '0xFFFFFFFF'
+    - reg:
+        bank: rf
+        index: 4
+        low32: '0x40000000'
+        high32: '0xFFFFFFFF'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+    elements:
+    - rf: 3
+      address: '0xFFFF00001010'
+      width: 4
+      value: '0x000000003F800000'
+    - rf: 4
+      address: '0xFFFF00001014'
+      width: 4
+      value: '0x0000000040000000'
+  spec_cite: adr-1015 D7/D8；SimRISC-03 §存取RF寄存器
+  notes: 反例 N45 order-kind-mismatch：ldm.t rf3, rb2, rd1, immu6=2：EA0 = 0xFFFF00001000 + 0x10 = 0xFFFF00001010；EA(1)
+    = EA0 + 1*4 = 0xFFFF00001014；rf3/rf4 递增；每元素 4 字节按 D13 装箱成 0xFFFFFFFFxxxxxxxx
+  order: block-increasing
+- id: neg-N46-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: performance
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N46 bad-class：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc 给出源
+    1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用 D17:S1
+    复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N47-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: deferred
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N47 status-not-active：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的 rf1、rfhc
+    给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0 用
+    D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N48-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: '0xFFFF00000014'
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N48 expected-pc-not-null：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N49-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N49 missing-top-level-field：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N50-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N50 src-register-not-preset：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb 给出目的
+    rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none
+- id: neg-N51-f1-ldt-rf-malign
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: legality
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000002'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000002'
+      value: '0x0000000000000000'
+      width: 4
+  expected_fault: MALIGN
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(4)（SimRISC-03:25）
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - fault:
+        type: MALIGN
+        pc: '0xFFFF00000010'
+    - pc: '0xFFFF00000010'
+  spec_cite: contract-f1-floating.md §3.1 aligned(4)；adr-1015 D3（ILLI 先于 MALIGN）
+  notes: 反例 N51 fault-record-not-last：ld.t-rf rf1, rb1, 0：rb1 = 0xFFFF00000002（% 4 = 2）+ imms12 = 0 →
+    4 字节不对齐 → MALIGN。本例无任何静态 ILLI 谓词成立，故走 MALIGN 分支
+  order: none
+- id: neg-N52-f1-ldt-rf-malign
+  identity: ld.t-rf
+  insn: ld.t-rf
+  mnemonic: ld.t
+  format: rrii
+  class: legality
+  encoding:
+    word: '0x16041000'
+  input_state:
+    rd: {}
+    rb:
+      rb1: '0x0000FFFF00000002'
+    ra: {}
+    rf: {}
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+    memory:
+    - address: '0xFFFF00000002'
+      value: '0x0000000000000000'
+      width: 4
+  expected_fault: MALIGN
+  expected_pc: null
+  expected_state: null
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1 aligned(4)（SimRISC-03:25）
+    semantics:
+      status: active
+      cite: SimRISC-03 §存取RF寄存器
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    tetra_high_half:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1011
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0xFFFFFFFF3F800000'
+    - fault:
+        type: MALIGN
+        pc: '0xFFFF00000010'
+  spec_cite: contract-f1-floating.md §3.1 aligned(4)；adr-1015 D3（ILLI 先于 MALIGN）
+  notes: 反例 N52 fault-commit-not-empty：ld.t-rf rf1, rb1, 0：rb1 = 0xFFFF00000002（% 4 = 2）+ imms12 = 0 →
+    4 字节不对齐 → MALIGN。本例无任何静态 ILLI 谓词成立，故走 MALIGN 分支
+  order: none
+- id: neg-N53-f1-foadd-basic-rf-index
+  identity: foadd
+  insn: foadd
+  mnemonic: foadd
+  format: orrr
+  class: semantic
+  encoding:
+    word: '0x44601083'
+  input_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x0000000000000000'
+      rf2: '0x3FF0000000000000'
+      rf3: '0x4000000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      from_reset: true
+      value: '0x7FF800007FC00000'
+    memory: []
+  expected_fault: null
+  expected_pc: null
+  expected_state:
+    rd: {}
+    rb: {}
+    ra: {}
+    rf:
+      rf1: '0x4008000000000000'
+    fcsr:
+      rounding_mode: RNE
+      flags: []
+      observed_mask: '0xFFF80000FFC3001F'
+      value: '0x7FF800007FC00000'
+    memory: []
+  status: active
+  facets:
+    encoding:
+      status: active
+      cite: contract-f1-floating.md §1 identity-table；opcodes.yaml
+    format:
+      status: active
+      cite: contract-f1-floating.md §1
+    operands:
+      status: active
+      cite: contract-f1-floating.md §1
+    legality:
+      status: active
+      cite: contract-f1-floating.md §3.1
+    semantics:
+      status: active
+      cite: contract-f1-floating.md §4
+    rf0_operand:
+      status: active
+      cite: contract-f1-floating.md D11；adr-1009 D2
+    fcsr_flags:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1010
+    tininess:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1014
+    nan_propagation:
+      status: active
+      cite: contract-f1-floating.md D1；adr-1013
+  ledger_refs:
+    active_keys:
+    - D17:S1
+    - D17:S4
+    trace_only: []
+    non_gap: []
+  blocked_points: []
+  unspecified: []
+  oracle:
+    kind: order
+    records:
+    - reg:
+        bank: rf
+        index: 1
+        value: '0x4008000000000000'
+    - fcsr:
+        rounding_mode: RNE
+        flags: []
+        observed_mask: '0xFFF80000FFC3001F'
+        value: '0x7FF800007FC00000'
+  spec_cite: SimRISC-03 §4.2 两源一目的运算（rfhb 目的、rfhc/rfhd 两源）；contract-f1-floating.md D5
+  notes: 反例 N53 input-fcsr-value-asserted：foadd rf1,rf2,rf3 = 1.0 + 2.0 = 3.0（0x4008000000000000）：rfhb
+    给出目的 rf1、rfhc 给出源 1.0、rfhd 给出源 2.0，1+2=3（3.0 = 1.5×2^1，指数 0x400、尾数最高位 1）。rf 索引 1/2/3 全是合法 rf 索引（rf0..rf63）。rf0
+    用 D17:S1 复位取值（RNE + flags 全 0）
+  order: none

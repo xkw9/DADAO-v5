@@ -21,6 +21,23 @@ Spec-first：所有判定依据 `contracts/opcodes.yaml`、`contracts/legality_r
   14. F9②③④：legality `expected_state == null`；`spec_cite` 非空字符串；
       semantic memory 地址越界阻断
 
+F1（浮点）向量（`TESTCASES-101t` 新增，检查项 15–19）：
+  15. `tests/vectors/f1/valid/*.yaml` 逐 case 过 `f1_cases.validate_f1_case`
+      （A–I/O 组：身份/编码、寄存器与 FCSR、互斥、facet、ledger、blocked/unspec、
+      内存与块、已激活 ADR 规则 D11–D16、oracle 记录交叉核对）
+  16. `tests/vectors/f1/invalid/*.yaml` 是**刻意坏数据**：每条 case 都**必须**被
+      拒绝（must-FAIL 门控）——保证「只会报 PASS 的检查器」不可能悄悄退化
+  17. 树级不变量：`D17:S2` 必须可追踪（`ledger_refs.trace_only`）；`D17:S7`
+      永不进 active_keys/blocked_points，也不计入任何覆盖计数
+  18. fact 层自洽：`F1Context().errors` 必须为空（合约重算 = resolution 投影 =
+      opcodes 字段表 = ADR 门禁）
+  19. ADR 激活门禁：`--adr-gate {auto,open,closed}`；`closed` 时受 D* 压住的
+      facet 不得声明 active（用于反例注入，见 `tests/vectors/schema.md` F1 章）
+
+F1 期望值同样 spec-first：全部 32/64 位位型由 `tools/testcases/f1_oracle_values.py`
+的**整数推导**给出，validator 用 `f1_cases.py` 的**独立**重算比对；
+**不**读取 LLVM/QEMU/SoftFloat/宿主浮点产物。
+
 退出码：有错误 `exit(1)` 并列出文件 + case 序号；无错误 `exit(0)`。
 
 注：
@@ -31,6 +48,7 @@ Spec-first：所有判定依据 `contracts/opcodes.yaml`、`contracts/legality_r
   - `expected_pc` 的**存在性**规则由 `005t`/`006t` 追加。
 """
 
+import argparse
 import glob
 import os
 import re
@@ -601,8 +619,107 @@ def validate_file(filepath, by_key, m1_keys, all_records, errors):
     return len(cases)
 
 
+# ═══════════════ 15–19. F1 浮点向量（TESTCASES-101t） ═══════════════
+F1_SUBDIRS = ("valid", "invalid")
+
+
+def _f1_load_dir(f1_dir, sub, errors):
+    """读 ``tests/vectors/f1/<sub>/*.yaml`` → ``[(relpath, cases), ...]``。"""
+    import f1_cases
+    out = []
+    d = os.path.join(f1_dir, sub)
+    if not os.path.isdir(d):
+        errors.append("F1 TREE: tests/vectors/f1/%s/ not found" % sub)
+        return out
+    for fpath in sorted(glob.glob(os.path.join(d, "*.yaml"))):
+        rel = os.path.relpath(fpath, f1_dir)
+        try:
+            cases = f1_cases.load_f1_doc(fpath)
+        except Exception as exc:
+            errors.append("%s: cannot parse YAML: %s" % (rel, exc))
+            continue
+        if not isinstance(cases, list) or not cases:
+            errors.append("%s: must be a non-empty YAML list of cases" % rel)
+            continue
+        out.append((rel, cases))
+    if not out:
+        errors.append("F1 TREE: tests/vectors/f1/%s/ has no *.yaml data file"
+                      % sub)
+    return out
+
+
+def validate_f1(repo_dir, adr_gate):
+    """跑 F1 校验，返回 ``(stats, errors)``。
+
+    三段门控，**都**必须通过：
+      * 18 fact 层：`F1Context().errors` 空（合约/投影/opcodes/ADR 四方自洽）；
+      * 15 正样例：`valid/` 每条 case 零 error；
+      * 16 反样例：`invalid/` 每条 case **至少**一个 error（must-FAIL）。
+    反样例门控是关键：只有它能让「validator 对坏数据确实会失败」成为**可执行
+    的**断言，而不是一句承诺（AGENTS.md「验证脚本反例门控」）。
+    """
+    import f1_cases
+    import f1_schema
+
+    errors = []
+    stats = {"cases": 0, "valid_cases": 0, "invalid_cases": 0,
+             "active_facets": 0, "blocked_facets": 0, "fcsr_asserts": 0,
+             "half_observations": 0, "identities": set(), "adr_gate": adr_gate,
+             "gate_open": True}
+    ctx = f1_schema.F1Context(root=repo_dir, adr_gate=adr_gate)
+    stats["gate_open"] = ctx.gate_open
+    for e in ctx.errors:
+        errors.append("F1 CONTEXT: %s" % e)
+
+    f1_dir = os.path.join(repo_dir, "tests", "vectors", "f1")
+
+    # 15 正样例：必须全绿
+    valid_files = _f1_load_dir(f1_dir, "valid", errors)
+    v_errors, v_stats = f1_cases.validate_f1_tree(ctx, valid_files)
+    errors.extend("F1 VALID: %s" % e for e in v_errors)
+    stats["cases"] += v_stats["cases"]
+    stats["valid_cases"] = v_stats["cases"]
+    for k in ("active_facets", "blocked_facets", "fcsr_asserts",
+              "half_observations"):
+        stats[k] += v_stats[k]
+    stats["identities"] |= v_stats["identities"]
+
+    # 16/17 反样例：必须**逐条**被拒；树不变量（id 唯一）同样适用
+    invalid_files = _f1_load_dir(f1_dir, "invalid", errors)
+    n_bad = 0
+    for rel, cases in invalid_files:
+        stats["invalid_cases"] += len(cases)
+        for i, case in enumerate(cases):
+            why = f1_cases.validate_f1_case(ctx, case)
+            if not why:
+                n_bad += 1
+                cid = case.get("id") if isinstance(case, dict) else None
+                errors.append(
+                    "F1 MUST-FAIL VIOLATION: %s[%d] (id=%r) is deliberately bad "
+                    "data but validate_f1_case accepted it; the negative-sample "
+                    "gate is the only thing keeping the F1 checks honest"
+                    % (rel, i, cid))
+    # 树级不变量：id 唯一 + D17:S2 可追踪（对反样例树也成立）
+    _i_errors, _i_stats = f1_cases.validate_f1_tree(ctx, invalid_files)
+    for e in _i_errors:
+        if "DUPLICATE case id" in e or e.startswith("TREE:"):
+            errors.append("F1 INVALID TREE: %s" % e)
+    return stats, errors
+
+
 def main():
+    ap = argparse.ArgumentParser(
+        description="校验 tests/vectors 的 M1 与 F1 向量 schema、覆盖率、"
+                    "inventory 同步与反例门控")
+    ap.add_argument(
+        "--adr-gate", choices=("auto", "open", "closed"), default="auto",
+        help="F1 ADR 激活门禁：auto=按 .xkw/knowledge/adr-*.md 的实际状态推导"
+             "（默认）；open=强制门开（只可在已逐条 Accepted 后用）；"
+             "closed=强制门关，用于验证「门关时被压住的 facet 不得 active」"
+             "这条检查确实可达 FAIL")
+    args = ap.parse_args()
     script_dir = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, script_dir)
     repo_dir = os.path.abspath(os.path.join(script_dir, "..", ".."))
 
     opcodes_path = os.path.join(repo_dir, "contracts", "opcodes.yaml")
@@ -734,6 +851,11 @@ def main():
               % len(data_coverage_gaps), file=sys.stderr)
         sys.exit(1)
 
+    # ─────────────── 15–19. F1 浮点向量（TESTCASES-101t） ───────────────
+    # 必须放在 M1 全部检查**之后**：M1 的成功行文本与退出码不得因 F1 改动。
+    f1_stats, f1_errors = validate_f1(repo_dir, args.adr_gate)
+    errors.extend(f1_errors)
+
     if errors:
         for err in errors:
             print(err, file=sys.stderr)
@@ -741,11 +863,21 @@ def main():
               file=sys.stderr)
         sys.exit(1)
 
+    # 注意：这一行的文本**逐字不变**（M1 兼容面），F1 的结果另起一行打印。
     print("validate_vectors: %d/%d M1 identities covered OK "
           "(inventory sync OK; %d data files, %d cases; "
           "data coverage gaps: %d)"
           % (covered, len(m1_keys), len(yaml_files), total_cases,
              len(data_coverage_gaps)))
+    print("validate_vectors: F1 %d/%d vectors OK (%d valid case(s) green; "
+          "%d invalid counterexample(s) all rejected; %d identity/identities; "
+          "facets %d active / %d blocked; fcsr asserts %d; "
+          "D13 half-observations %d; ADR gate %s)"
+          % (f1_stats["cases"], f1_stats["cases"],
+             f1_stats["valid_cases"], f1_stats["invalid_cases"],
+             len(f1_stats["identities"]), f1_stats["active_facets"],
+             f1_stats["blocked_facets"], f1_stats["fcsr_asserts"],
+             f1_stats["half_observations"], f1_stats["adr_gate"]))
     sys.exit(0)
 
 

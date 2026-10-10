@@ -11,6 +11,22 @@
 #   status      : active/deferred（deferred = 该特性属 M1 范围外，留后续阶段）
 #   description : 规则描述
 #
+# ── F1（RF 浮点）增量字段（SPEC-102t 新增，**纯增量**）────────────────────────
+# 本文件原先只有 `status`（**只描述 M1 语义**）。F1 阶段**不修改任何既有 `status`**，
+# 只在相关规则上**追加**下列可选字段，供 .xkw/knowledge/contract-f1-floating.md 使用：
+#   f1_status   : F1 阶段的适用性
+#                   active  = F1 直接按本规则原文适用
+#                   blocked = F1 有适用范围，但被某个 OPEN decision 阻塞，
+#                             **不得实现**，须待该 decision 逐条确认后解冻
+#   f1_decision : 阻塞本规则的 ADR-1004 decision（D11–D17）；不阻塞时省略
+#   f1_note     : 补充说明（可选）
+# 没有 `f1_status` 的规则 = **不适用于 F1**；F1 的 f1.legality_refs 不得引用它们。
+# 新增的 F1 专属规则一律 `status: deferred`（M1 范围外）+ `f1_status: active`。
+#
+# **F1 不把 spec 静默项写成 fault 规则**：例如 rf0 的 SBZ 域被写入时的行为
+# （合约静默项 S6）在 spec 中既无 fault 类型也无 §锚点，故 `sbz_nonzero`
+# 只追加 `f1_status: blocked` 标注，**不新增**任何编码该缺口的规则。
+#
 # 字段引用约定：description 中引用的寄存器字段名与 contracts/opcodes.yaml 的
 #   fields[].name 一致（例如块赋值目的字段为 rdhb/rbhb/rahb，而非 rdha/rbha）。
 #
@@ -20,6 +36,9 @@
 #   - M1 范围外（deferred）：RF 浮点（SimRISC-03 全部）、LR-SC 原子（SimRISC-04 §LR-SC指令）、
 #     特权 cfx（SimRISC-04 §特权指令）；按 ADR-0004 D5 执行这些编码触发 ILLI
 #   - SBZ 非零 → ILLI 由 ADR-0004 D5.3 冻结（架构自定义；spec 未规定 fault 类型）
+#   - F1 范围 = SimRISC-03 的 64 个 identity（18 rf-qfc + 46 misc-rf）；权威与
+#     逐 identity/facet 清单见 .xkw/knowledge/contract-f1-floating.md。
+#     F1 记录仍为 `excluded_m1: true` + `decode: ILLI`（M1 不实现）。
 
 rules:
   # ── RD 目的寄存器规则 ────────────────────────────────────────────────────────
@@ -28,6 +47,14 @@ rules:
     kind: static
     spec_cite: "SimRISC-01 §rd0 为目的寄存器约定"
     status: active
+    f1_status: active
+    f1_note: >
+      F1 直接适用，不需新规则。F1 中目的字段为 rd 的 identity 只有
+      ft2it/ft2io/ft2ut/ft2uo/fo2it/fo2io/fo2ut/fo2uo（目的 rdhb）、
+      ftcls/focls（目的 rdhb）、ftqcmp/ftscmp/foqcmp/foscmp（目的 rdhb）。
+      规范依据是 spec/SimRISC-00-指令系统设计.md:55（`rd0` 固定为 0，只读；
+      「其余指令目的为 rd0 时触发 ILLI 异常」）——SimRISC-01 不在 F1 权威集内，
+      故 F1 侧的引用以 SimRISC-00 为准。
     description: >
       写 rd0 为目的寄存器时触发 ILLI 异常。
       单目的指令不允许（丢弃唯一结果无语义）。
@@ -90,6 +117,15 @@ rules:
     kind: static
     spec_cite: "SimRISC-03 §rf0 为目的寄存器约定"
     status: deferred
+    f1_status: blocked
+    f1_decision: D11
+    f1_note: >
+      **F1 不得实现本规则**，直到 D11 被逐条确认。阻塞原因（合约 §7 候选 ADR-1005）：
+      spec/SimRISC-03-浮点类指令.md:7 的「浮点运算指令」**范围未定义**——是否覆盖
+      §格式转换指令/§浮点分类指令/§浮点比较指令/§浮点条件赋值指令/§寄存器组之间块赋值
+      未说明；同一条规则与 :215-216「当 rfhd 为 rf0 时，ftsgnj/fosgnj 实现 abs(rfhc)」
+      这一**要求 rfhd=rf0 产生结果**的特例直接冲突；:7 的「rf ld/st 中 rf0 为目的时允许」
+      只点名 rf ld/st，未点名 rd2rf/rf2rd。
     description: >
       浮点运算指令的目的或任一源操作数为 rf0 时触发 ILLI 异常
       （rf0 为控制和状态寄存器 FCSR，不可作为普通浮点操作数）。
@@ -247,6 +283,13 @@ rules:
     kind: static
     spec_cite: "SimRISC-00 §指令域说明"
     status: active
+    f1_status: blocked
+    f1_note: >
+      **F1 不得实现本规则**。合约静默项 S6：spec/SimRISC-03-浮点类指令.md:7 只说
+      rf0「写只读位时静默忽略，rw 位正常写入」，**只覆盖 [63..51] 与 [31..22] 两个只读域**；
+      rf0 的 [50..32]、[21..18]、[15..5] 三个 SBZ 域被写入时的行为 spec **未写**。
+      spec 未给 fault 类型，所以本规则**不新增**任何编码该缺口的规则，只在此标注阻塞；
+      沿用 ADR-0004 D5.3 属**架构自定义**，F1 是否沿用**未决**。
     description: >
       SBZ（Should Be Zero）字段非零时触发 ILLI 异常（静态）。
       ADR-0004 D5.3 冻结「SBZ 非零 → ILLI」（架构自定义；spec 未规定 fault 类型）。
@@ -301,6 +344,12 @@ rules:
     kind: static
     spec_cite: "SimRISC-03 §S1D1"
     status: deferred
+    f1_status: active
+    f1_note: >
+      F1 直接适用：ftroot/foroot 的 immu6 只支持 2（平方根）与 3（立方根），
+      其它值触发 ILLI（spec/SimRISC-03-浮点类指令.md:188）。
+      注意 spec 同处 :190 明示 `rootn(-0, 2)` 的结果「不做具体要求」——
+      那是**语义**开口（合约 semantics facet 记 partial），不是 fault 条件。
     description: >
       ftroot/foroot 指令不支持的 n 值触发 ILLI 异常；仅支持 n=2（平方根）与 n=3（立方根）。
       浮点类指令（RF）整体属 M1 范围外。
@@ -310,7 +359,83 @@ rules:
     kind: static
     spec_cite: "SimRISC-03 §S1D1"
     status: deferred
+    f1_status: active
+    f1_note: >
+      F1 直接适用：ftlog/folog 的 immu6 只支持 2（log2）、1（e，自然对数）、
+      0（10，log10），其它值触发 ILLI（spec/SimRISC-03-浮点类指令.md:192）。
+      immu6=0 **不是** multi_immu6_zero 那样的非法零计数——它在此表示底 10。
     description: >
       ftlog/folog 指令不支持的底值触发 ILLI 异常；
       支持的底值：2（log2）、e（自然对数，immu6=1 约定）、10（log10，immu6=0 约定）。
       浮点类指令（RF）整体属 M1 范围外。
+
+  # ── F1 新增规则（SPEC-102t；M1 范围外，仅 F1 适用）──────────────────────────
+  - id: fp_malign_rf
+    fault: MALIGN
+    kind: dynamic
+    spec_cite: "SimRISC-03 §存取RF寄存器"
+    status: deferred
+    f1_status: active
+    f1_note: >
+      F1 新增（纯增量）。F1 不引用既有的 data_malign：后者是 M1 规则且其
+      description 里的指令名列表不含 RF 侧。规范依据
+      spec/SimRISC-03-浮点类指令.md:25。
+    description: >
+      RF 存取未对齐触发 MALIGN 异常（动态，取决于运行时有效地址）：
+      ld.o-rf/st.o-rf/ldm.o-rf/stm.o-rf 需 8 字节对齐；
+      ld.t-rf/st.t-rf/ldm.t-rf/stm.t-rf 需 4 字节对齐。
+      对齐以元素为单位还是以首地址为单位，规范未逐字说明；
+      合约静默项 S4 只登记「多 fault 条件并存时无优先级」，不推断对齐粒度。
+
+  - id: fp_block_immu6_zero
+    fault: ILLI
+    kind: static
+    spec_cite: "SimRISC-03 §存取RF寄存器、§寄存器组之间块赋值、§格式转换指令"
+    status: deferred
+    f1_status: active
+    f1_note: >
+      F1 新增（纯增量）。覆盖 ldm.*-rf/stm.*-rf（:29）、rd2rf/rf2rd（:48）、
+      全部 22 条格式转换（:132）的「immu6 = 0 时触发 ILLI 异常」。
+      immu6 上限 63 由 6 位字段宽度唯一决定（SimRISC-00:191 `rrri` 的
+      `hd[5:0]`），故 §块赋值/§格式转换 的「有效范围 1~63」不构成额外 fault 条件
+      （合约静默项 S2：表述不一致但无行为后果）。
+      **不适用于** ftlog/folog：其 immu6=0 表示底 10（见 fp_log_invalid_base）。
+    description: >
+      RF 多寄存器存取、RF↔RD 块赋值与格式转换指令 immu6=0 时触发 ILLI 异常：
+      ldm.t-rf/stm.t-rf/ldm.o-rf/stm.o-rf（immu6 = 连续转换的寄存器个数）、
+      rd2rf/rf2rd（immu6 = 寄存器个数）、全部 22 条格式转换指令。
+      不适用于 ftroot/foroot/ftlog/folog——它们的 immu6 是 n 值 / 底值编码
+      （n 支持 2/3；底支持 0/1/2），immu6=0 对 ftlog/folog 是**合法**的 log10。
+
+  - id: fp_block_range_overflow
+    fault: ILLI
+    kind: static
+    spec_cite: "SimRISC-03 §存取RF寄存器、§寄存器组之间块赋值、§格式转换指令"
+    status: deferred
+    f1_status: active
+    f1_note: >
+      F1 新增（纯增量）。规范依据 spec/SimRISC-03-浮点类指令.md:30（§存取RF）、
+      :49（§块赋值）、:133（§格式转换），三处均写「任一起始寄存器 + immu6 > 64」。
+    description: >
+      RF 多寄存器存取、RF↔RD 块赋值与格式转换中，起始寄存器 + immu6 > 64 时
+      触发 ILLI 异常，不环绕、不截断：
+      ldm.*-rf/stm.*-rf 检查 rfha + immu6 ≤ 64；
+      rd2rf 检查目的 rfhb + immu6 ≤ 64 与源 rdhc + immu6 ≤ 64；
+      rf2rd 检查目的 rdhb + immu6 ≤ 64 与源 rfhc + immu6 ≤ 64；
+      格式转换按目的/源各自检查。
+
+  - id: fp_rf_slot_overflow
+    fault: ILLI
+    kind: static
+    spec_cite: "SimRISC-03 §存取RF寄存器"
+    status: deferred
+    f1_status: active
+    f1_note: >
+      F1 新增（纯增量）。规范依据 spec/SimRISC-03-浮点类指令.md:31，
+      该条是 §存取RF 独有的**第三条** ILLI 谓词（§块赋值/§格式转换没有单独复述，
+      因为它们的「任一起始寄存器」已含 RF 侧）。与 fp_block_range_overflow 并列存在，
+      不合并——原文如此。
+    description: >
+      ldm.t-rf/ldm.o-rf/stm.t-rf/stm.o-rf 中 `rfha + immu6 > 64`（超出 rf63）时
+      触发 ILLI 异常。此条与 fp_block_range_overflow 的「任一起始寄存器」谓词
+      在同一编码上并存；规范未规定两者的判定粒度差异。

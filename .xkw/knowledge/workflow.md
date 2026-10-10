@@ -64,7 +64,7 @@
 | 角色 | 主模型 | 降级模型 |
 | --- | --- | --- |
 | architect | `openai/gpt-5.6-sol` | `opencode/nemotron-3-ultra-free` |
-| reviewer | `openai/gpt-5.6-sol` | `opencode/nemotron-3-ultra-free` |
+| reviewer | `openai/gpt-5.6-luna` | `opencode/nemotron-3-ultra-free` |
 | engineer | `opencode/big-pickle` | `opencode/mimo-v2.6-flash-free` |
 
 - 规划/审查与代码必须使用不同模型，防止同模型自证。
@@ -167,7 +167,7 @@
    - 验收逐条标“现在可跑”或“BLOCKED（原因 + 替代证据）”。
 4. 用 reviewer 交叉审查草案的内部一致性、依赖、可执行性、spec/vectors 一致性和 ADR 判据。
 5. 涉及 ADR 时，主会话提出 decisions，**一次只向用户确认一个 decision**。未经逐条确认不得写 Accepted。
-6. 审查通过后落盘任务书，更新 milestones 与 MEMORY；`k` 满足 §8 后置 `已验证`。
+6. 审查通过后，architect 可仅将规划任务书落盘至 `.xkw/tasks/**`；主会话更新 ADR、milestones 与 MEMORY，并在 `k` 满足 §8 后置 `已验证`。
 7. 核对最终 diff 只含规划范围，不覆盖启动时既有用户改动。
 
 输出：任务文件清单、依赖/关键路径、reviewer 结论、ADR 确认记录、MEMORY/milestones 更新点。

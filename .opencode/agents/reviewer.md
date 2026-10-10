@@ -1,7 +1,7 @@
 ---
 description: 独立验收 .xkw 任务；枚举检查器并亲自注入反例，输出 Accepted 或 Needs Revision
 mode: subagent
-model: opencode/mimo-v2.6-flash-free
+model: openai/gpt-5.6-luna
 permissions:
   # ── edit：仓库内只允许改任务书；/tmp 下自由 ──────────────────
   - action: edit

@@ -3,6 +3,9 @@
 > 本文件记录**已知但本轮不做**的项。`.tao/knowledge/deferred.md` 是原项目的登记处，**只读**；本文件只记 `.xkw` 自己的轮次产生的新发现。
 > 正式工作仍走 `.xkw/tasks/`。
 
+## spec
+
+
 ## infra
 
 - **组件源 `sjtu` 已失效**（2026-09-25 实测）：`mirror.sjtu.edu.cn` 与 `mirrors.sjtug.sjtu.edu.cn` 互相 302，构成死循环。`manifests/components.lock.toml` 两个组件的 `[[component.source]]` 仍指向它。

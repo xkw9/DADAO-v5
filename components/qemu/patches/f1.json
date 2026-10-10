@@ -1,0 +1,21 @@
+{
+  "format": 1,
+  "component": "qemu",
+  "phase": "f1",
+  "note": "F1 phase boundary (INFRA-108t, ADR-1004 D6/D9). Frozen M1 facts: the base lock, the M1 patch count, the M1 head commit and its tree, and the M1 series entry names. F1 source trees are created at m1_head_commit and F1 patches are appended to the same series starting at f1_first_patch_number; the M1 prefix may never be rewritten, reordered, renamed or overwritten. m1_head_tree makes the boundary verifiable offline from .cache + 0001-0008 alone (see tools/infra/f1_replay_check.py), i.e. without .work/source.",
+  "base_lock": "c3d48b7d1e89604920e5b81b91140c2ad39a1943",
+  "m1_patch_count": 8,
+  "m1_series_entries": [
+    "0001-dadao-target-skeleton.patch",
+    "0002-dadao-decodetree.patch",
+    "0003-dadao-rd-arith.patch",
+    "0004-dadao-load-store.patch",
+    "0005-dadao-translate-split.patch",
+    "0006-dadao-ctrl-flow.patch",
+    "0007-dadao-ra-semantics.patch",
+    "0008-dadao-tb-chain-fix.patch"
+  ],
+  "m1_head_commit": "5c3535f66892868a5829a1b0a242866da6d98e08",
+  "m1_head_tree": "4a14d56ce4ecfc6f5edd2f2d181ec6628844233b",
+  "f1_first_patch_number": 9
+}

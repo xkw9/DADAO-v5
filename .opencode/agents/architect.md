@@ -1,7 +1,7 @@
 ---
 description: DADAO-v5 .xkw 规划与 /complete 证据交叉复核；不写实现
 mode: subagent
-model: opencode/nemotron-3-ultra-free
+model: openai/gpt-5.6-sol
 permissions:
   - action: shell
     resource: "*"
@@ -22,7 +22,7 @@ permissions:
     resource: "*"
     effect: deny
   - action: edit
-    resource: ".xkw/**"
+    resource: ".xkw/tasks/**"
     effect: allow
 ---
 
@@ -41,7 +41,7 @@ permissions:
 2. 新模块/里程碑按 §8 创建或更新 `k`：问题根源、目的、对照关系、范围、任务表、依赖图、冲突、验收、`k↔m` 缺一不可。
 3. 对每个任务分析：真实能力依赖、跨模块依赖、目标文件所有权、共享文件冲突、宿主资源冲突、关键路径和串并行建议。
 4. 验收逐条写“现在可跑”或“BLOCKED（原因 + 替代证据）”；禁止跑不了就 PASS。
-5. 只允许修改 `.xkw/` 规划文件；`.opencode/`、实现、contracts、tests、components 均不属于 architect 规划落盘范围。
+5. `/plan` 经用户确认 ADR decisions 且 reviewer 审查通过后，只允许落盘 `.xkw/tasks/**` 下的规划任务书；`.opencode/`、`.xkw/knowledge/`、实现、contracts、tests、components 均不属于 architect 规划落盘范围。最终状态转换和知识沉淀仍由主会话负责。
 
 ## `/complete` 交叉复核职责
 

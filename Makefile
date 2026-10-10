@@ -137,3 +137,109 @@ check-spec-drift:
 # Standalone target, not part of `make check`.
 check-spec-refs:
 	@$(PYTHON) tools/infra/check_spec_refs.py
+
+# ---------------------------------------------------------------------------
+# F1 phase entrypoints (INFRA-108t, ADR-1004 D6/D9).
+#
+# Everything above this line is the M1 baseline and is intentionally left
+# byte-identical: the only Makefile change is the addition of the block below
+# plus the separate .PHONY line, and `make check-m1-entrypoints` enforces that
+# mechanically (the M1 part of the Makefile diff must contain no removed line).
+#
+# F1 never writes into .work/source or .work/build.  It has its own isolated
+# source trees under .work/f1/source, its own build roots under .work/f1/build,
+# and appends only 0009+ to the existing per-component series.  F1 is *not* part
+# of `make check` or `make prepare`: a missing or half-built F1 must never change
+# the meaning of the M1 entrypoints.
+F1_WORK        ?= .work/f1
+F1_SRC_RAW     ?= $(F1_WORK)/source
+F1_BUILD_RAW   ?= $(F1_WORK)/build
+F1_LOG_DIR     ?= .work/log/infra
+F1_QEMU_SRC    ?= $(F1_SRC_RAW)/qemu
+F1_QEMU_BUILD  ?= $(F1_BUILD_RAW)/qemu
+F1_LLVM_SRC    ?= $(F1_SRC_RAW)/llvm-project/llvm
+F1_LLVM_BUILD  ?= $(F1_BUILD_RAW)/llvm
+
+.PHONY: f1-status f1-prepare f1-apply-series f1-make-patch f1-check \
+        f1-build-mc f1-build-qemu f1-replay-check f1-baseline-snapshot \
+        f1-baseline-check check-m1-entrypoints
+
+f1-status:
+	@$(PYTHON) tools/infra/f1_prepare.py --dry-run
+	@$(PYTHON) tools/infra/f1_series.py --list
+
+# Create .work/f1/source/{llvm-project,qemu} at the recorded M1 8-patch head.
+# Idempotent: an existing F1 tree is verified and then left alone, never reset.
+f1-prepare:
+	@$(PYTHON) tools/infra/f1_prepare.py
+
+# Apply the 0009+ series entries to the F1 trees.  Refuses an invalid series, a
+# dirty tree, or a tree that does not contain the M1 head as an ancestor.
+f1-apply-series:
+	@$(PYTHON) tools/infra/f1_apply.py
+
+# Append-only export of the F1 commits as 0009+ patches; refuses to overwrite any
+# existing patch file and preserves the frozen M1 series prefix byte for byte.
+f1-make-patch:
+	@$(PYTHON) tools/infra/f1_make_patch.py
+	@$(PYTHON) tools/infra/f1_prepare.py
+
+# Isolation + series + F1/M1 separation gates (acceptance criteria 1 and 3).
+f1-check:
+	@$(PYTHON) tools/infra/f1_series.py
+	@$(PYTHON) tools/infra/check_f1_isolation.py --require-m1 --require-idle
+
+# Offline replay of 0001-0008 (+0009+) from the local bare mirror only.  The
+# replay trees are throw-away and never live inside the repository.
+F1_REPLAY_DIR ?= /tmp/opencode/INFRA-108t/f1-replay
+f1-replay-check:
+	@$(PYTHON) tools/infra/f1_replay_check.py --work-dir $(F1_REPLAY_DIR)
+
+# F1 build entrypoints.  Serialised through <work>/f1/.build.lock with a
+# concurrent-build probe, because this host's memory headroom is too small for
+# two configure/build/link runs at once (INFRA-105t measured 45 MiB MemAvailable
+# at the worst point).  The LLVM flags mirror `build-mc` and add the lld
+# single-link-job settings the M1 build actually used.
+f1-build-mc: manifest-check
+	@$(call component-enabled,llvm-project) || { \
+	  echo "f1-build-mc: component 'llvm-project' is not enabled / commit pending (manifests/components.lock.toml); refusing to fake success"; \
+	  exit 1; \
+	}
+	$(PYTHON) tools/infra/f1_build_lock.py --label f1-build-mc \
+	  --log $(F1_LOG_DIR)/INFRA-108t-f1-build-mc-serial.log -- \
+	  cmake -G Ninja -B $(F1_LLVM_BUILD) -S $(F1_LLVM_SRC) \
+	    -DLLVM_TARGETS_TO_BUILD=DADAO \
+	    -DLLVM_ENABLE_PROJECTS="" \
+	    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+	    -DLLVM_ENABLE_ASSERTIONS=ON \
+	    -DLLVM_USE_LINKER=lld \
+	    -DLLVM_PARALLEL_LINK_JOBS=1 -- \
+	  ninja -C $(F1_LLVM_BUILD) llvm-mc llvm-objdump llvm-objcopy llvm-readobj FileCheck not LLVMDADAOCodeGen
+	@echo "f1-build-mc: PASS"
+
+f1-build-qemu: manifest-check
+	@$(call component-enabled,qemu) || { \
+	  echo "f1-build-qemu: component 'qemu' is not enabled / commit pending (manifests/components.lock.toml); refusing to fake success"; \
+	  exit 1; \
+	}
+	$(PYTHON) tools/infra/f1_build_lock.py --label f1-build-qemu \
+	  --log $(F1_LOG_DIR)/INFRA-108t-f1-build-qemu-serial.log -- \
+	  sh -c 'mkdir -p $(F1_QEMU_BUILD) && cd $(F1_QEMU_BUILD) && \
+	    $(CURDIR)/$(F1_QEMU_SRC)/configure --target-list=dadao-softmmu \
+	      --enable-tcg --disable-werror --disable-download && \
+	    $(MAKE) -C $(F1_QEMU_BUILD) -j$$(nproc)'
+	@echo "f1-build-qemu: PASS"
+
+# M1 baseline protection: snapshot before F1 work, compare after.
+F1_BASELINE ?= $(F1_WORK)/m1-baseline.json
+f1-baseline-snapshot:
+	@$(PYTHON) tools/infra/check_f1_baseline.py snapshot --out $(F1_BASELINE)
+
+f1-baseline-check:
+	@$(PYTHON) tools/infra/check_f1_baseline.py compare --before $(F1_BASELINE)
+
+# Proves the M1 entrypoints are semantically untouched: the Makefile diff may
+# only add lines, and `make -n` must still expand the M1 recipes to exactly the
+# recorded commands (acceptance criterion 4).
+check-m1-entrypoints:
+	@$(PYTHON) tools/infra/check_m1_entrypoints.py

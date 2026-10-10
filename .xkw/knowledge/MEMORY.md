@@ -6,6 +6,26 @@
 
 ## 当前状态
 
+- 2026-09-29：**`TESTCASES-101t` 已验证（F1 schema 与 oracle 接口冻结）**——M1 747 向量保持兼容；新增 RF/FCSR/bit-pattern/facet/六键 schema、testcases 唯一 oracle I/O、19 条正样例/53 条反样例及独立整数重算。validator、context、I/O 与 39/39 可复原反例通过；root/log 正确舍入、`rootn(-0,2)` 与 canonical qNaN 常量仍保持 BLOCKED/unspecified。审查期间唯一新增的外部汇报 `docs/progress-report-2026-09-29.md` 经用户明确排除，72 条 baseline 路径/哈希保持；最小证据返工后 reviewer 与 architect（均按用户要求使用 GPT-5.6 Luna）Accepted。下游 QEMU-101t 现获得 schema 接口前置；LLVM-101t 仍可独立推进。
+
+- 2026-09-28：**`SPEC-104t` 已验证；ADR-1009～1015 已 Accepted**——主会话按用户授权直接完成 lifecycle 返工并跳过后续复审：G13 支持全 Candidate 与全 Accepted 两种一致状态、拒绝混合状态；Candidate/Accepted 三态临时树均已验证，新增 CE-29b；全量反例 100/100。`--require-active` 已在激活后复跑。D17 仍为六键 active，S2 trace-only、S7 Closed by spec；下游 TESTCASES/LLVM/QEMU/INTEG 仍未执行，语义 Accepted 不等于实现或 E2E PASS。
+
+- 2026-09-28：**`/plan SPEC-104t` 已通过 architect/reviewer 交叉审查并落盘**——新任务 `SPEC-104t` 处于待开始，将在不改写 `SPEC-102t/103t` 历史证据的前提下，为 ADR-1009～1015 的 27 条已逐条用户确认 decision 建立机器 resolution 投影、独立 checker/反例和 10 本下游任务书加 `INTEG-104m` 同步。ADR 仍全为 Candidate，必须在该任务 `/complete` 双角色 Accepted 后才由主会话置 Accepted；`--require-active` 在此之前预期非零 BLOCKED。当前关键路径改为 `SPEC-103t → SPEC-104t → TESTCASES-101t`。D17 active 仍为六键，S2 trace-only、S7 Closed by spec；现行 S6 范围由历史 six 经 `6-1+5` 投影为 D11 十条 rf0 写白名单。SimRISC-03:7-8 为 HTML 注释，非当前语义 authority。
+
+- 2026-09-28：**`SPEC-103t` 已验证，ADR-1008 已 Accepted**——94 项 proof 检查、48/48 可复原反例、raw spec 复核及 reviewer 自注入均通过；active ledger 为 S1/S3/S4/S5/S6/S8，S2 trace-only，S7 为 RD/RF non-overlap 的历史 non-gap，状态 **Closed by spec**（非运行时 PASS）。D11 消费者映射已补齐。下游任务书仍有旧七键措辞，须在各自 dispatch 前先同步。
+
+- 2026-09-27：**ADR-1008 已建为 Candidate，D1 已由用户确认**——SimRISC-00 明示 RD/RF 是独立寄存器组，SimRISC-03 的 `rd2rf`/`rf2rd` 方向固定，故历史 `D17:S7` 是 spec-determined non-gap，不再是 active OPEN 门禁。`SPEC-102t` 不回溯改写；`SPEC-103t` 处于待返工，将以六键 active ledger（S1/S3/S4/S5/S6/S8）修正 proof、消费者映射和反例。S2 仍为 ledger 外 trace-only；旧下游七键任务书在各自 dispatch 前须另行同步。
+
+- 2026-09-27：**`SPEC-103t` 规划可执行性已修订**——`SPEC-102t=已验证` 的状态漂移已同步到 `SPEC-101k`；`SPEC-103t` 现自包含地规定 `contracts/f1_gap_proofs.yaml`、SPEC checker/反例、64 identity 影响矩阵与无环消费者映射。D11–D17 和七项 D17 OPEN-ID 仍只产生无选择的 Candidate 输入；S2 保持 ledger 外 trace-only。本轮仅更新任务书和路线摘要，无 ADR decision、实现或提交。
+
+- 2026-09-27：**`SPEC-102t` 已验证（F1 合约、64 identity 与 D17 ledger）**——64=18+46、pseudo 排除、编码/legality/source 投影和 8 条 RF 对齐/MALIGN 规则均由 spec 独立核对；D17 ledger 精确包含 `D17:S1,S3,S4,S5,S6,S7,S8`，全为 BLOCKED，S2 仅为 ledger 外 trace-only。`d17_open_ids` 已投影到 64 条机器记录，74 项合约检查、119 引用/32 语义锚点、36/36 可复原反例、编码/QFC 校验均通过；reviewer 与 architect 均 Accepted，审查 baseline 45 路径/哈希一致。未选择运行语义、未创建或修改 ADR；下一关键任务为 `SPEC-103t`（缺口逐键证明与 Candidate 输入）。
+
+- 2026-09-27：**F1 D17 门禁规划已修订（`SPEC-101k` 保持已验证）**——`SPEC-102t` 仍为 **待返工**，须返工后重新经 reviewer+architect Accepted 才满足下游依赖。`SPEC-103t` 将产出精确包含 `D17:S1,S3,S4,S5,S6,S7,S8` 的 OPEN-ID ledger；S2 仅作“no behavioral consequence”的台账外来源追踪，不得记 PASS。TESTCASES/QEMU/INTEG 按适用 facet 消费该 ledger；LLVM MC 仅对运行期行为 N/A，不能据此解锁语义。已移除不存在的 `TESTCASES-103t` 路线引用；本轮未选择语义、未创建/修改 ADR、未执行实现或提交。
+
+- 2026-09-27：**`INFRA-108t` 已验证（F1 隔离基线）**——建立 `.work/f1/source/{llvm-project,qemu}`（各 M1 8-patch 头、clean）和 F1 build 入口；M1 `.work/source/**`、`.work/build/**` 与两组件 `0001`–`0008` 的 18 条 hash 均受门禁保护，F1 仅支持未来连续 `0009+`。`make f1-check` 32/32、离线 replay、M1 entrypoint 4/4 均通过；F1 完整功能构建维持 BLOCKED（无实现补丁，QEMU 离线缺 subprojects）。reviewer 独立注入 0008 改写、错基线、跳号、M1 build 泄漏、dirty tree 与 source/build/root 路径逃逸，均真实 FAIL 并还原复绿；用户授权本任务省略 architect 交叉复核。下一关键任务为 `SPEC-102t`（合约与 64 identity 映射）或按依赖并行推进 `TESTCASES-101t` 的准备工作。
+
+- 2026-09-26：**F1 浮点阶段已规划（`SPEC-101k` 已验证）**——ADR-1004 D1–D18 已逐条确认；architect 已落盘 15 本 F1 任务书，reviewer 按 workflow §9 审计 **Accepted**。范围是 SimRISC-03 的 64 个真实 identity（18 RF/QFC + 46 MISC-RF）与 `set.ft`/`set.fo` pseudo；独立 oracle 属 `testcases`，不设 GOLDEN 模块。F1 使用 `.work/f1/**` 隔离树，仅从 LLVM/QEMU M1 `0001`–`0008` 后追加 `0009+`，M1 树/构建产物受保护。D11–D17 的未唯一语义保持 OPEN/BLOCKED，未来 `ADR-1005`～`1007` 仅 Candidate；`INTEG-104m` 在 64 identity required facets 闭合并保持 M1 `747/739/0/8/0` 回归后才可达成。下一动作是 `/dispatch INFRA-108t` 前的四项预检与用户确认。
+
 - 2026-09-25：**OpenAI/Codex 接入完成**——ChatGPT 订阅经 `chatgpt-headless` 设备码登录（`auth list` = OpenAI stored）；端到端实测 `gpt-5.5` / `gpt-5.6-sol` / `gpt-6-astra` 均 OK；`gpt-5.3-codex*` 已对 ChatGPT 账号退役勿用。
   - **网络前提**：服务器直连 OpenAI 被墙，须经 `127.0.0.1:7890` 代理；**后台服务必须带 `HTTPS_PROXY` env 启动**（重启脚本留档 `/tmp/opencode/restart-svc.sh`，日志 `/tmp/opencode/svc-restart.log`）。启动方法：退出全部 TUI → `pkill -f 'opencode serve --service'` → 带 env 启动 `opencode`。
   - **模型分配与降级**：见 `workflow.md`「模型分配与降级」——architect/reviewer=`openai/gpt-5.6-sol`、engineer=`opencode/big-pickle`（审查与代码必须不同模型），不可用时降级 free 模型。

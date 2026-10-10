@@ -42,9 +42,9 @@ OpenCode V2 官方文档确认：项目命令位于 `.opencode/commands/*.md`，
 
 不修改仓库外 `~/.config/opencode/agents/`；新增 `.opencode/agents/{architect,engineer,reviewer}.md`，由 OpenCode 的项目优先级覆盖/细化全局同名角色。全局文件后续由用户自行删除或泛化。
 
-### D8：收紧角色边界，知识沉淀仍由主会话负责
+### D8：收紧角色边界，规划任务书可由 architect 落盘，知识沉淀仍由主会话负责
 
-architect 强制做启动模板、依赖/文件冲突/并行分析，complete 阶段只复核；engineer 强制状态与 dirty baseline、禁止改 `.tao` 和覆盖既有改动、失败即停、先得真实输出再填完成区；reviewer 先枚举全部检查器，只在临时树证伪，可修任务书事实记录但不扩范围实现。最终状态转换、ADR 门禁和知识沉淀由主会话负责。
+architect 强制做启动模板、依赖/文件冲突/并行分析，complete 阶段只复核；在 `/plan` 已取得必要 ADR decisions 的逐条用户确认且 reviewer 审查通过后，architect 可直接落盘 `.xkw/tasks/**` 下的规划任务书。architect 的 `shell` 仅保留只读 allowlist，`edit` 仅允许 `.xkw/tasks/**`；不得写 `.xkw/knowledge/`、`.opencode/`、实现或构建文件。engineer 强制状态与 dirty baseline、禁止改 `.tao` 和覆盖既有改动、失败即停、先得真实输出再填完成区；reviewer 先枚举全部检查器，只在临时树证伪，可修任务书事实记录但不扩范围实现。最终状态转换、ADR 门禁和知识沉淀由主会话负责。
 
 ### D9：workflow 是唯一流程规则源
 
@@ -72,4 +72,5 @@ commands 仅作薄入口，agents 仅写角色不变量；完整步骤只写在 
 - 2026-09-25：用户先确认生成本 ADR。
 - D1–D7、D9 均逐条确认保留。
 - D8 经一次澄清后最终确认：**知识沉淀仍由主会话负责**。
+- 2026-09-26：经用户授权就地修订 D8：architect 在 `/plan` 的 ADR decisions 已逐条确认、reviewer 审查通过后，可用受限 `edit` 权限直接落盘 `.xkw/tasks/**` 的规划任务书；shell 保持只读 allowlist，`.xkw/knowledge/` 与最终状态/知识沉淀仍由主会话独占。
 - 全部 decisions 确认后置 **Accepted**；后续改变任一 decision 须新增 ADR 或按授权标注 Superseded，不静默改写。

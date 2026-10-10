@@ -1,0 +1,21 @@
+{
+  "format": 1,
+  "component": "llvm-project",
+  "phase": "f1",
+  "note": "F1 phase boundary (INFRA-108t, ADR-1004 D6/D9). Frozen M1 facts: the base lock, the M1 patch count, the M1 head commit and its tree, and the M1 series entry names. F1 source trees are created at m1_head_commit and F1 patches are appended to the same series starting at f1_first_patch_number; the M1 prefix may never be rewritten, reordered, renamed or overwritten. m1_head_tree makes the boundary verifiable offline from .cache + 0001-0008 alone (see tools/infra/f1_replay_check.py), i.e. without .work/source.",
+  "base_lock": "6dfe1677ab8dffbc6ec13d53a1e0215d75147689",
+  "m1_patch_count": 8,
+  "m1_series_entries": [
+    "0001-dadao-triple-registration.patch",
+    "0002-dadao-target-skeleton.patch",
+    "0003-dadao-register-info.patch",
+    "0004-dadao-instrinfo.patch",
+    "0005-dadao-asmparser.patch",
+    "0006-dadao-disassembler.patch",
+    "0007-wyde-position-operand-parser.patch",
+    "0008-dadao-elf-e_flags.patch"
+  ],
+  "m1_head_commit": "a5c3a44403fd8efd5ea4e0b0f9fc2961ed9ca784",
+  "m1_head_tree": "0e058573eb70da9e57db6995d6caef6bbe8985da",
+  "f1_first_patch_number": 9
+}

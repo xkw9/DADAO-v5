@@ -206,6 +206,45 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrii
+    operands:
+    - rfha
+    - rbhb
+    - imms12_hi
+    - imms12_lo
+    legality_predicates:
+    - aligned(4)
+    - rf0_dst_allowed
+    legality_refs:
+    - fp_malign_rf
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D13
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    notes:
+    - S1
+    - S4
+    - S6
 - insn: st.t-rf
   mnemonic: st.t
   format: rrii
@@ -235,6 +274,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrii
+    operands:
+    - rfha
+    - rbhb
+    - imms12_hi
+    - imms12_lo
+    legality_predicates:
+    - aligned(4)
+    legality_refs:
+    - fp_malign_rf
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: st.b-rd
   mnemonic: st.b
   format: rrii
@@ -522,6 +596,44 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrii
+    operands:
+    - rfha
+    - rbhb
+    - imms12_hi
+    - imms12_lo
+    legality_predicates:
+    - aligned(8)
+    - rf0_dst_allowed
+    legality_refs:
+    - fp_malign_rf
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    notes:
+    - S1
+    - S4
+    - S6
 - insn: st.o-rf
   mnemonic: st.o
   format: rrii
@@ -551,6 +663,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrii
+    operands:
+    - rfha
+    - rbhb
+    - imms12_hi
+    - imms12_lo
+    legality_predicates:
+    - aligned(8)
+    legality_refs:
+    - fp_malign_rf
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ldm.ub-rd
   mnemonic: ldm.ub
   format: rrri
@@ -757,6 +904,54 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrri
+    operands:
+    - rfha
+    - rbhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - aligned(4)
+    - rf0_dst_allowed
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - rf_slot_overflow_illi
+    legality_refs:
+    - fp_malign_rf
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - fp_rf_slot_overflow
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D13
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    notes:
+    - S1
+    - S2
+    - S4
+    - S6
+    - S8
 - insn: stm.t-rf
   mnemonic: stm.t
   format: rrri
@@ -785,6 +980,50 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrri
+    operands:
+    - rfha
+    - rbhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - aligned(4)
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - rf_slot_overflow_illi
+    legality_refs:
+    - fp_malign_rf
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - fp_rf_slot_overflow
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S8
+    notes:
+    - S1
+    - S2
+    - S4
+    - S8
 - insn: stm.b-rd
   mnemonic: stm.b
   format: rrri
@@ -1080,6 +1319,53 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrri
+    operands:
+    - rfha
+    - rbhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - aligned(8)
+    - rf0_dst_allowed
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - rf_slot_overflow_illi
+    legality_refs:
+    - fp_malign_rf
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - fp_rf_slot_overflow
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S8
+    notes:
+    - S1
+    - S2
+    - S4
+    - S6
+    - S8
 - insn: stm.o-rf
   mnemonic: stm.o
   format: rrri
@@ -1108,6 +1394,50 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 存取RF寄存器
+    format: rrri
+    operands:
+    - rfha
+    - rbhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - aligned(8)
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - rf_slot_overflow_illi
+    legality_refs:
+    - fp_malign_rf
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - fp_rf_slot_overflow
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §存取RF寄存器
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S8
+    notes:
+    - S1
+    - S2
+    - S4
+    - S8
 - insn: or.w-rd
   mnemonic: or.w
   format: rwii
@@ -1373,6 +1703,43 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 立即数常数赋值：Immediate constant
+    format: rwii
+    operands:
+    - rfha
+    - wpN
+    - immu16_hi
+    - immu16_mid
+    - immu16_lo
+    legality_predicates:
+    - rf0_dst_allowed
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §立即数常数赋值：Immediate constant
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items: []
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    notes:
+    - S1
+    - S4
+    - S6
 - insn: add.uo-rd
   mnemonic: add.uo
   format: rrrr
@@ -1552,6 +1919,42 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: S3D1
+    format: rrrr
+    operands:
+    - rfha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §S3D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fomadd
   mnemonic: fomadd
   format: rrrr
@@ -1579,6 +1982,42 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: S3D1
+    format: rrrr
+    operands:
+    - rfha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §S3D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: add.si-rd
   mnemonic: add.si
   format: riii
@@ -1749,6 +2188,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 浮点条件赋值指令
+    format: rrrr
+    operands:
+    - rdha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §浮点条件赋值指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: cs.ne-rf
   mnemonic: cs.ne
   format: rrrr
@@ -1776,6 +2250,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 浮点条件赋值指令
+    format: rrrr
+    operands:
+    - rdha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §浮点条件赋值指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: cs.n-rd
   mnemonic: cs.n
   format: rrrr
@@ -1829,6 +2338,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 浮点条件赋值指令
+    format: rrrr
+    operands:
+    - rdha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §浮点条件赋值指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: cs.z-rd
   mnemonic: cs.z
   format: rrrr
@@ -1882,6 +2426,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 浮点条件赋值指令
+    format: rrrr
+    operands:
+    - rdha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §浮点条件赋值指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: cs.p-rd
   mnemonic: cs.p
   format: rrrr
@@ -1935,6 +2514,41 @@
   spec_cite: SimRISC-00 §SimRISC QFC
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 浮点条件赋值指令
+    format: rrrr
+    operands:
+    - rdha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §SimRISC QFC
+    semantics_cite: SimRISC-03 §浮点条件赋值指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: cs.eq-rd
   mnemonic: cs.eq
   format: rrrr
@@ -3737,9 +4351,52 @@
     bank: imm
     signed: false
   legality: []
-  spec_cite: SimRISC-00 §MISC-RF指令编码
+  spec_cite: SimRISC-00 §MISC-octa指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 寄存器组之间块赋值
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-octa指令编码
+    semantics_cite: SimRISC-03 §寄存器组之间块赋值
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S6
+    - D17:S7
+    notes:
+    - S1
+    - S4
+    - S6
+    - S7
 - insn: rf2rd
   mnemonic: rf2rd
   format: orri
@@ -3766,9 +4423,50 @@
     bank: imm
     signed: false
   legality: []
-  spec_cite: SimRISC-00 §MISC-RF指令编码
+  spec_cite: SimRISC-00 §MISC-octa指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: rf-qfc
+    section: 寄存器组之间块赋值
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-octa指令编码
+    semantics_cite: SimRISC-03 §寄存器组之间块赋值
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: spec-determined
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S7
+    notes:
+    - S1
+    - S4
+    - S7
 - insn: and.t
   mnemonic: and.t
   format: orrr
@@ -5946,6 +6644,46 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点分类指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_1_for_cls
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点分类指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: partial
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S3
+    - D17:S4
+    notes:
+    - S1
+    - S3
+    - S4
 - insn: ft2fo
   mnemonic: ft2fo
   format: orri
@@ -5975,6 +6713,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: partial
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ft2ft
   mnemonic: ft2ft
   format: orri
@@ -6004,6 +6783,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftroot
   mnemonic: ftroot
   format: orri
@@ -6033,6 +6853,46 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S1D1
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - rootn_n_in_2_3
+    legality_refs:
+    - fp_root_invalid_n
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S1D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
+    - rootn(-0,2)
 - insn: ftlog
   mnemonic: ftlog
   format: orri
@@ -6062,6 +6922,45 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S1D1
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - log_base_in_0_1_2
+    legality_refs:
+    - fp_log_invalid_base
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S1D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: focls
   mnemonic: focls
   format: orri
@@ -6091,6 +6990,46 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点分类指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_1_for_cls
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点分类指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: partial
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S3
+    - D17:S4
+    notes:
+    - S1
+    - S3
+    - S4
 - insn: fo2ft
   mnemonic: fo2ft
   format: orri
@@ -6120,6 +7059,48 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: partial
+    open_items:
+    - D11
+    - D12
+    - D13
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fo2fo
   mnemonic: fo2fo
   format: orri
@@ -6149,6 +7130,46 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: foroot
   mnemonic: foroot
   format: orri
@@ -6178,6 +7199,45 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S1D1
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - rootn_n_in_2_3
+    legality_refs:
+    - fp_root_invalid_n
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S1D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
+    - rootn(-0,2)
 - insn: folog
   mnemonic: folog
   format: orri
@@ -6207,6 +7267,44 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S1D1
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - log_base_in_0_1_2
+    legality_refs:
+    - fp_log_invalid_base
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S1D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ft2it
   mnemonic: ft2it
   format: orri
@@ -6236,6 +7334,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ft2io
   mnemonic: ft2io
   format: orri
@@ -6265,6 +7406,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ft2ut
   mnemonic: ft2ut
   format: orri
@@ -6294,6 +7478,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ft2uo
   mnemonic: ft2uo
   format: orri
@@ -6323,6 +7550,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: it2ft
   mnemonic: it2ft
   format: orri
@@ -6352,6 +7622,48 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: io2ft
   mnemonic: io2ft
   format: orri
@@ -6381,6 +7693,48 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ut2ft
   mnemonic: ut2ft
   format: orri
@@ -6410,6 +7764,48 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: uo2ft
   mnemonic: uo2ft
   format: orri
@@ -6439,6 +7835,48 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fo2it
   mnemonic: fo2it
   format: orri
@@ -6468,6 +7906,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fo2io
   mnemonic: fo2io
   format: orri
@@ -6497,6 +7978,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fo2ut
   mnemonic: fo2ut
   format: orri
@@ -6526,6 +8050,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fo2uo
   mnemonic: fo2uo
   format: orri
@@ -6555,6 +8122,49 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    - rd_dest_not_rd0
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: it2fo
   mnemonic: it2fo
   format: orri
@@ -6584,6 +8194,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: io2fo
   mnemonic: io2fo
   format: orri
@@ -6613,6 +8264,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ut2fo
   mnemonic: ut2fo
   format: orri
@@ -6642,6 +8334,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: uo2fo
   mnemonic: uo2fo
   format: orri
@@ -6671,6 +8404,47 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 格式转换指令
+    format: orri
+    operands:
+    - ha
+    - rfhb
+    - rdhc
+    - immu6
+    legality_predicates:
+    - immu6_zero_illi
+    - block_range_overflow_illi
+    - immu6_1_63
+    legality_refs:
+    - fp_block_immu6_zero
+    - fp_block_range_overflow
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §格式转换指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftadd
   mnemonic: ftadd
   format: orrr
@@ -6699,6 +8473,43 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftsub
   mnemonic: ftsub
   format: orrr
@@ -6727,6 +8538,43 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftmul
   mnemonic: ftmul
   format: orrr
@@ -6755,6 +8603,43 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftdiv
   mnemonic: ftdiv
   format: orrr
@@ -6783,6 +8668,43 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftrem
   mnemonic: ftrem
   format: orrr
@@ -6811,6 +8733,43 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftsclb
   mnemonic: ftsclb
   format: orrr
@@ -6839,6 +8798,45 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D13
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S5
+    notes:
+    - S1
+    - S4
+    - S5
 - insn: ftsgnn
   mnemonic: ftsgnn
   format: orrr
@@ -6867,6 +8865,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点符号位操作指令
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点符号位操作指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftsgnj
   mnemonic: ftsgnj
   format: orrr
@@ -6895,6 +8929,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点符号位操作指令
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点符号位操作指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: open-blocked
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D13
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: foadd
   mnemonic: foadd
   format: orrr
@@ -6923,6 +8993,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fosub
   mnemonic: fosub
   format: orrr
@@ -6951,6 +9057,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fomul
   mnemonic: fomul
   format: orrr
@@ -6979,6 +9121,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fodiv
   mnemonic: fodiv
   format: orrr
@@ -7007,6 +9185,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: forem
   mnemonic: forem
   format: orrr
@@ -7035,6 +9249,42 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fosclb
   mnemonic: fosclb
   format: orrr
@@ -7063,6 +9313,44 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: S2D1
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §S2D1
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: partial
+      rf0_operand: spec-determined
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: open-blocked
+      compare_unordered: n/a
+      nan_propagation: open-blocked
+    open_items:
+    - D12
+    - D15
+    - D16
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    - D17:S5
+    notes:
+    - S1
+    - S4
+    - S5
 - insn: fosgnn
   mnemonic: fosgnn
   format: orrr
@@ -7091,6 +9379,41 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点符号位操作指令
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点符号位操作指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: fosgnj
   mnemonic: fosgnj
   format: orrr
@@ -7119,6 +9442,41 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点符号位操作指令
+    format: orrr
+    operands:
+    - ha
+    - rfhb
+    - rfhc
+    - rfhd
+    legality_predicates: []
+    legality_refs: []
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点符号位操作指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: n/a
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftqcmp
   mnemonic: ftqcmp
   format: orrr
@@ -7147,6 +9505,44 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点比较指令
+    format: orrr
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates:
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点比较指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: open-blocked
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D14
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: ftscmp
   mnemonic: ftscmp
   format: orrr
@@ -7175,6 +9571,44 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点比较指令
+    format: orrr
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates:
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点比较指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: open-blocked
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D14
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: foqcmp
   mnemonic: foqcmp
   format: orrr
@@ -7203,6 +9637,44 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点比较指令
+    format: orrr
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates:
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点比较指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: open-blocked
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D14
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
 - insn: foscmp
   mnemonic: foscmp
   format: orrr
@@ -7231,3 +9703,41 @@
   spec_cite: SimRISC-00 §MISC-RF指令编码
   excluded_m1: true
   decode: ILLI
+  f1:
+    in_scope: true
+    group: misc-rf
+    section: 浮点比较指令
+    format: orrr
+    operands:
+    - ha
+    - rdhb
+    - rfhc
+    - rfhd
+    legality_predicates:
+    - rd_dest_not_rd0
+    legality_refs:
+    - rd_dest_rd0
+    encoding_cite: SimRISC-00 §MISC-RF指令编码
+    semantics_cite: SimRISC-03 §浮点比较指令
+    facets:
+      encoding: spec-determined
+      format: spec-determined
+      operands: spec-determined
+      legality: spec-determined
+      semantics: spec-determined
+      rf0_operand: open-blocked
+      tetra_high_half: n/a
+      fcsr_flags: open-blocked
+      tininess: n/a
+      compare_unordered: open-blocked
+      nan_propagation: n/a
+    open_items:
+    - D11
+    - D12
+    - D14
+    d17_open_ids:
+    - D17:S1
+    - D17:S4
+    notes:
+    - S1
+    - S4
